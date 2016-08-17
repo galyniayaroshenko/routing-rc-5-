@@ -1,0 +1,14 @@
+<header>
+  <nav>
+    <!--<a [routerLink]="['startPage']">Home</a>-->
+    <a [routerLink]="['startPage/signup']">signup</a>
+    <a [routerLink]="['startPage/login']">login</a>
+  </nav>
+</header>
+<main>
+  <h1>Hello from {{api.title}}!</h1>
+  <router-outlet></router-outlet>
+</main>
+<footer>
+  <a [href]="url">Webpack Angular 2 Starter</a>
+</footer>
