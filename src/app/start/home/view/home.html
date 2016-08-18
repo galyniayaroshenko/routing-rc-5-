@@ -1,6 +1,34 @@
-    <h1>Login users:</h1>
+    <!--<h1>Login users:</h1>
     <p><a (click)="logout()">Logout</a></p>
     <button (click)="getUsersService()">Get users</button>
     <ul>
-      <li *ngFor="let user of users">Email:{{user.email}}</li>
-    </ul>
+      <li *ngFor="let user of users">Email:{{user.name}}</li>
+    </ul>-->
+
+    <!--<h1>Tour of Heroes ({{mode}})</h1>
+<h3>Heroes:</h3>
+<ul>
+  <li *ngFor="let user of users">
+    {{user.firstName}}
+  </li>
+</ul>
+New hero name:
+<input #newHeroName />
+<button (click)="addUser(newHeroName.value); newHeroName.value=''">
+  Add Hero
+</button>
+<div class="error" *ngIf="errorMessage">{{errorMessage}}</div>-->
+
+<h1>Tour of Users ({{mode}})</h1>
+<h3>Users:</h3>
+<ul>
+  <li *ngFor="let user of users">
+    {{user.firstName}}
+  </li>
+</ul>
+New hero name:
+<input #newUserName />
+<button (click)="addUser(newUserName.value); newUserName.value=''">
+  Add User
+</button>
+<div class="error" *ngIf="errorMessage">{{errorMessage}}</div>

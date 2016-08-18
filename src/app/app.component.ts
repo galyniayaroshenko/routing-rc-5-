@@ -1,5 +1,7 @@
 import { Component }  from '@angular/core';
 
+import './rxjs-operators';
+
 // const styles   = require('./app.scss');
 const template = require('./app.html');
 
