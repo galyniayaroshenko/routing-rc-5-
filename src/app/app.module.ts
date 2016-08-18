@@ -1,30 +1,29 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule } from '@angular/http';
-import { FormsModule } from '@angular/forms';
+import { NgModule }       from '@angular/core';
+import { BrowserModule }  from '@angular/platform-browser';
+import { FormsModule }    from '@angular/forms';
 
-import { AppComponent } from './app.component';
-import { StartPage } from './startPage/startPage.component';
-// import { Signup } from './signup/signup.component';
-import { Login} from './login/login.component';
-import { ApiService } from './api.service';
+import { AppComponent }  from './app.component';
 import { routing } from './app.routing';
+import { HeroesModule } from './heroes/heroes.module';
+import { LoginModule } from './login/login.module';
+import { SignupModule } from './signup/signup.module';
+import { HomeModule } from './login/home/home.module';
 
 @NgModule({
   imports: [
     BrowserModule,
-    HttpModule,
     FormsModule,
-    routing
+    routing,
+    HeroesModule,
+    LoginModule,
+    SignupModule,
+    HomeModule
   ],
   declarations: [
-    AppComponent,
-    StartPage
-    // Signup
+    AppComponent
   ],
-  providers: [
-    ApiService
-  ],
-  bootstrap: [AppComponent]
+  providers: [],
+  bootstrap: [ AppComponent ]
 })
-export class AppModule {}
+export class AppModule {
+}

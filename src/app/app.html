@@ -1,14 +1,7 @@
-<header>
-  <nav>
-    <!--<a [routerLink]="['startPage']">Home</a>-->
-    <a [routerLink]="['startPage/signup']">signup</a>
-    <a [routerLink]="['startPage/login']">login</a>
-  </nav>
-</header>
-<main>
-  <h1>Hello from {{api.title}}!</h1>
-  <router-outlet></router-outlet>
-</main>
-<footer>
-  <a [href]="url">Webpack Angular 2 Starter</a>
-</footer>
+<h1 class="title">Component Router</h1>
+    <nav>
+      <a routerLink="/heroes" routerLinkActive="active">Heroes</a>
+      <a routerLink="/login" routerLinkActive="active">Login</a>
+      <a routerLink="/signup" routerLinkActive="active">Signup</a>
+      </nav>
+    <router-outlet></router-outlet>
