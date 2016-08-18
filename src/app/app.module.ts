@@ -4,10 +4,11 @@ import { FormsModule }    from '@angular/forms';
 
 import { AppComponent }  from './app.component';
 import { routing } from './app.routing';
-import { HeroesModule } from './heroes/heroes.module';
-import { LoginModule } from './login/login.module';
-import { SignupModule } from './signup/signup.module';
-import { HomeModule } from './login/home/home.module';
+import { HeroesModule } from './start/heroes/heroes.module';
+import { LoginModule } from './start/login/login.module';
+import { SignupModule } from './start/signup/signup.module';
+import { HomeModule } from './start/home/home.module';
+import { StartModule } from './start/start.module';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { HomeModule } from './login/home/home.module';
     HeroesModule,
     LoginModule,
     SignupModule,
-    HomeModule
+    HomeModule,
+    StartModule
   ],
   declarations: [
     AppComponent

@@ -1,0 +1,6 @@
+    <h1>Login users:</h1>
+    <p><a (click)="logout()">Logout</a></p>
+    <button (click)="getUsersService()">Get users</button>
+    <ul>
+      <li *ngFor="let user of users">Email:{{user.email}}</li>
+    </ul>

@@ -4,8 +4,8 @@ import { FormsModule }    from '@angular/forms';
 
 import { LoginComponent }    from './component/login.component';
 
-import { AuthGuard } from './service/auth-guard.service';
-import { AuthService } from './service/auth.service';
+// import { AuthGuard } from './service/auth-guard.service';
+// import { AuthService } from './service/auth.service';
 
 import { loginRouting } from './login.routing';
 
@@ -19,8 +19,8 @@ import { loginRouting } from './login.routing';
     LoginComponent
   ],
   providers: [
-    AuthGuard,
-    AuthService
+    // AuthGuard,
+    // AuthService
   ]
 })
 export class LoginModule {}

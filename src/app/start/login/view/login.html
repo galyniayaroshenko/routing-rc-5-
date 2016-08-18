@@ -1,0 +1,9 @@
+<form role="form" (submit)="login($event, email.value, password.value)">
+  <p>Login</p>
+    <label for="email">Email</label>
+    <input type="text" #email placeholder="Email" required>
+    <label for="password">Password</label>
+    <input type="password" #password placeholder="Password" required>
+  <button type="submit">Submit</button>
+  <a [routerLink]="['/signup']">Click here to Signup</a>
+</form>

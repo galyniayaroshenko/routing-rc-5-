@@ -1,0 +1,17 @@
+<form (submit)="signup($event, email.value, password.value)">
+                      <label for="email">Email</label>
+                      <input type="text" #email id="email" placeholder="Email" required>
+                    
+                        <label  for="password">Password</label>
+                        <input type="password" id="password" required>
+                 
+                      <label for="name">Name</label>
+                      <input type="text" #name id="name" placeholder="Name" required>
+                    
+                      <label for="surname">Surname</label>
+                      <input type="text"  #surname id="surname" placeholder="Surname" required>
+                    
+                    <button type="submit" >Submit</button>
+                    <a [routerLink]="['/login']">Click here to Login</a>
+           
+</form>
