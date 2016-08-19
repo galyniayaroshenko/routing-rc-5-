@@ -7,3 +7,5 @@
   <button type="submit">Submit</button>
   <a [routerLink]="['/signup']">Click here to Signup</a>
 </form>
+<button (click)="login(email.value, password.value)">Login</button>
+      <!--<button (click)="logout()" *ngIf="authService.isLoggedIn">Logout</button>-->

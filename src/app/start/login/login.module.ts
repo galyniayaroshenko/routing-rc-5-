@@ -4,9 +4,6 @@ import { FormsModule }    from '@angular/forms';
 
 import { LoginComponent }    from './component/login.component';
 
-// import { AuthGuard } from './service/auth-guard.service';
-// import { AuthService } from './service/auth.service';
-
 import { loginRouting } from './login.routing';
 
 @NgModule({
@@ -18,9 +15,6 @@ import { loginRouting } from './login.routing';
   declarations: [
     LoginComponent
   ],
-  providers: [
-    // AuthGuard,
-    // AuthService
-  ]
+  providers: []
 })
 export class LoginModule {}

@@ -2,12 +2,9 @@ import { Component }        from '@angular/core';
 import { Router,
          NavigationExtras } from '@angular/router';
   
-const styles   = require('../view/start.scss');
-const template = require('../view/start.html');
-
 @Component({
-  template: template,
-  styles: [ styles ]
+  templateUrl: '../view/start.html',
+  styleUrls: [ '../view/start.scss' ]
 })
 
 export class StartComponent {}
