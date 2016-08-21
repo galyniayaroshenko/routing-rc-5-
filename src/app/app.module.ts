@@ -12,6 +12,7 @@ import { LoginModule }  from './start/login/login.module';
 import { SignupModule } from './start/signup/signup.module';
 import { HomeModule }   from './start/home/home.module';
 import { StartModule }  from './start/start.module';
+import { PopupModule }   from './start/popup/popup.module';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { StartModule }  from './start/start.module';
     LoginModule,
     SignupModule,
     HomeModule,
-    StartModule
+    StartModule,
+    PopupModule
   ],
   declarations: [
     AppComponent

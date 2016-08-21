@@ -1,31 +1,27 @@
 <!--<form (submit)="signup( email.value, password.value, firstname,value, lastname.value)">-->
-<form>
-  <label for="email">Email</label>
-  <input type="text" #email name="email" placeholder="Email" >
-  <p *ngIf="messageEmail">{{messageEmail}}</p>
+<!--<div class="signup-page">-->
+    <form>
+      <input type="text" #email name="email" placeholder="Email">
+      <p *ngIf="messageEmail">{{messageEmail}}</p>
 
-  <label for="password">Password</label>
-  <input type="password" #password id="password" >
-  <!--<p >{{messagePassword}}</p>-->
+      <input type="password" #password id="password">
+      <!--<p >{{messagePassword}}</p>-->
 
-  <label for="firstName">FirstName</label>
-  <input type="text" #firstName id="firstName" placeholder="FirstName">
-  <!--<p>{{messageFirstName}}</p>-->
+      <input type="text" #firstName id="firstName" placeholder="FirstName">
+      <!--<p>{{messageFirstName}}</p>-->
 
-  <label for="lastname">Lastname</label>
-  <input type="text" #lastName id="lastname" placeholder="Lastname">
-  <!--<p *ngIf="messageLastName">{{messageLastName}}</p>-->
+      <input type="text" #lastName id="lastname" placeholder="Lastname">
+      <!--<p *ngIf="messageLastName">{{messageLastName}}</p>-->
 
-  
-  <button (click)="signup(email.value, password.value, firstName.value, lastName.value)">Submit</button>
-  <a [routerLink]="['/login']">Click here to Login</a>
-  <ul>
-    <li *ngFor="let user of users">
-      {{user.email}}
-      {{user.password}}
-      {{user.firstName}}
-      {{user.lastName}}
-    </li>
-  </ul>
 
-</form>
+      <button (click)="signup(email.value, password.value, firstName.value, lastName.value)">Submit</button>
+      <p class="message">Login? <a [routerLink]="['/login']">Click here to Login</a></p>
+      
+      <ul>
+        <li *ngFor="let user of users">
+          {{user.email}} {{user.password}} {{user.firstName}} {{user.lastName}}
+        </li>
+      </ul>
+
+    </form>
+<!--</div>-->

@@ -2,8 +2,6 @@ import { NgModule }       from '@angular/core';
 import { CommonModule }   from '@angular/common';
 import { FormsModule }    from '@angular/forms';
 
-import { StartComponent }    from './component/start.component';
-
 import { startRouting } from './start.routing';
 
 @NgModule({
@@ -12,9 +10,7 @@ import { startRouting } from './start.routing';
     FormsModule,
     startRouting 
   ],
-  declarations: [
-    StartComponent
-  ],
+  declarations: [],
   providers: []
 })
 export class StartModule {}
