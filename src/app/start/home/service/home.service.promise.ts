@@ -8,7 +8,8 @@ import { User }           from './user';
 export class HomePromiseService {
   constructor (private http: Http) {}
 
-  private usersUrl = 'app/users.json';  // URL to web API
+  // private usersUrl = 'app/users.json';  
+private usersUrl = 'http://private-34927-authapp.apiary-mock.com/users';
 
   getUser (): Promise<User[]> {
     return this.http.get(this.usersUrl)

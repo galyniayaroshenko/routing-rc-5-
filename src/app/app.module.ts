@@ -6,9 +6,9 @@ import { routing }       from './app.routing';
 
 import { InMemoryBackendService, 
          SEED_DATA } from 'angular2-in-memory-web-api';
-import { UserData }  from './user-data';
+// import { UserData }  from './user-data';
 
-import { LoginModule }  from './start/login/login.module';
+// import { LoginModule }  from './start/login/login.module';
 import { SignupModule } from './start/signup/signup.module';
 import { HomeModule }   from './start/home/home.module';
 import { StartModule }  from './start/start.module';
@@ -19,7 +19,6 @@ import { PopupModule }   from './start/popup/popup.module';
     HttpModule,
     JsonpModule,
     routing,
-    LoginModule,
     SignupModule,
     HomeModule,
     StartModule,
@@ -29,8 +28,9 @@ import { PopupModule }   from './start/popup/popup.module';
     AppComponent
   ],
     providers: [
-    { provide: XHRBackend, useClass: InMemoryBackendService }, // in-mem server
-    { provide: SEED_DATA,  useClass: UserData }                // in-mem server data
+      // { provide(API_ENDPOINT, { useValue ='http://private-34927-authapp.apiary-mock.com'}) }
+    // { provide: XHRBackend, useClass: InMemoryBackendService }, 
+    // { provide: SEED_DATA,  useClass: UserData }                
   ],
   bootstrap: [ AppComponent ]
 })

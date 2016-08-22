@@ -1,3 +1,20 @@
+.overlay {
+  background-color: rgba(0, 0, 0, 0.7); 
+  height: 100%;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+
+  form {
+    left: 50% !important;
+    position: absolute !important;
+    top: 45% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+}
+
+
 form {
     position: relative;
     max-width: 360px;
