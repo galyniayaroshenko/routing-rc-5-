@@ -3,13 +3,13 @@ import { Http, Response } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 
 import { User }           from './user';
-import { HomePromiseService }       from '../../../service/over-service';
+import { OverPromiseService }       from '../../../service/over.service';
 
 @Injectable()
 export class SignupPromiseService {
   errorMessage: string;
   users: any;
-  constructor (private http: Http, private homePromiseService: HomePromiseService) { }
+  constructor (private http: Http, private signupPromiseService: OverPromiseService) { }
 
   // private usersUrl = 'app/users.json';  // URL to web API
 
@@ -48,7 +48,7 @@ export class SignupPromiseService {
 
   // getUsers() {
     
-  //   this.homePromiseService.get('http://private-34927-authapp.apiary-mock.com/users')
+  //   this.signupPromiseService.get('http://private-34927-authapp.apiary-mock.com/users')
   //                    .then(
   //                      users => this.users = users,
   //                      error =>  this.errorMessage = <any>error);

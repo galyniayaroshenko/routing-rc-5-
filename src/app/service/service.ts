@@ -1,17 +1,20 @@
 import { Injectable }     from '@angular/core';
-import { Http, Response } from '@angular/http';
 // import { Headers, RequestOptions } from '@angular/http';
 
 import { User }           from './user';
-import { HomePromiseService }       from './over-service';
+import { OverPromiseService }       from './over.service';
 
 @Injectable()
 export class Service {
   errorMessage: string;
   users: any;
-  constructor (private http: Http, private homePromiseService: HomePromiseService) { }
+  constructor (private overPromiseService: OverPromiseService) { }
  
  getAll() {
-  	return this.homePromiseService.get('http://private-34927-authapp.apiary-mock.com/users');
+  	return this.overPromiseService.get('http://private-34927-authapp.apiary-mock.com/users');
+  }
+  signup(firstName, lastName, email, birth) {
+    let body = JSON.stringify({ firstName, lastName, email, birth });
+    return this.overPromiseService.post('http://private-34927-authapp.apiary-mock.com/register', body);
   }
 }
