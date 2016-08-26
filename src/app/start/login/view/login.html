@@ -1,10 +1,9 @@
 <div class="overlay">
-      <form role="form" (submit)="login($event, email.value, password.value)">
+      <form role="form" (submit)="login(email.value, password.value)">
       <input type="text" #email placeholder="Email" required>
       <input type="password" #password placeholder="Password" required>
       <button type="submit">Submit</button>
       <p class="message">Not registered?<a [routerLink]="['/signup']">Click here to Signup</a></p>
       </form>
-      <!--<button (click)="login(email.value, password.value)">Login</button>-->
-            <!--<button (click)="logout()" *ngIf="authService.isLoggedIn">Logout</button>-->
 </div>
+

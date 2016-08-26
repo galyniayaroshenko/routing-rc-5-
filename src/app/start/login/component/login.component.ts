@@ -1,8 +1,16 @@
-import { Component }        from '@angular/core';
+import { Component, OnInit }        from '@angular/core';
 import { Router,
          NavigationExtras } from '@angular/router';
+import { Http, Headers } from '@angular/http';
+import {
+  FORM_PROVIDERS,
+  FORM_DIRECTIVES,
+  ControlGroup,
+  FormBuilder,
+  Validators
+} from '@angular/common';
          
-import { AuthService }      from '../service/auth.service';
+//  import { LoginService }      from '../service/login.service';
 
 @Component({
   templateUrl: '../view/login.html',
@@ -10,38 +18,35 @@ import { AuthService }      from '../service/auth.service';
 })
 
 export class LoginComponent {
-  // message: string;
+  // isLoggedIn: boolean = false;
 
-  constructor(public authService: AuthService, public router: Router) {
-    // this.setMessage();
+  constructor( public router: Router, public http: Http ) {}
+
+  login(email, password) {
+    let body = JSON.stringify({ email, password });
+    console.log(body);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    this.http.post('http://private-34927-authapp.apiary-mock.com/login', body, {  headers: headers })
+      .subscribe(
+        response => {
+          if (response.json().status == 'OK') {
+            // this.isLoggedIn = true;
+            console.log(response.json());
+            localStorage.setItem('authToken', response.json().data.authToken);
+            this.router.navigate(['/home']);
+            console.log(localStorage.getItem('authToken'));
+          } else {
+            alert('email address or password you entered is not correct');
+            console.log('response.json().status.success', response.json().status.success);
+          }
+          console.log('response.json()', response.json());
+        },
+        error => {
+          alert(error.text());
+          console.log(error.text());
+        }
+      );
   }
 
-  // setMessage() {
-  //   this.message = 'Logged ' + (this.authService.isLoggedIn ? 'in' : 'out');
-  // }
-
-  login() {
-    // this.message = 'Trying to log in ...';
-
-    this.authService.login().subscribe(() => {
-      // this.setMessage();
-      if (this.authService.isLoggedIn) {
-        let redirect = this.authService.redirectUrl ? this.authService.redirectUrl : '/home';
-
-        let navigationExtras: NavigationExtras = {
-          preserveQueryParams: true,
-          preserveFragment: true
-        };
-
-        // Redirect the user
-        this.router.navigate([redirect], navigationExtras);
-      }
-    });
-  }
-
-  // logout() {
-  //   this.authService.logout();
-  //   this.setMessage();
-  // }
 }
 

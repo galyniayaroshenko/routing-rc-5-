@@ -2,12 +2,12 @@ import { Component, OnInit }        from '@angular/core';
 import { Router,
          NavigationExtras } from '@angular/router';
 
-import { OverPromiseService }       from '../../../service/over.service';
+import { HomePromiseService }       from '../service/home.service.promise';
 
 @Component({
   templateUrl: '../view/home.html',
   styleUrls: [ '../view/home.scss' ],
-  providers: [ OverPromiseService]
+  providers: [ HomePromiseService]
 })
 
 export class HomePromiseComponent implements OnInit {
@@ -15,15 +15,19 @@ export class HomePromiseComponent implements OnInit {
   users: any;
   mode = 'Promise';
 
-  constructor (private homePromiseService: OverPromiseService ) {}
+  constructor (public router: Router, private homePromiseService: HomePromiseService ) {}
 
   ngOnInit() { this.getUsers(); }
 
   getUsers() {
-    this.homePromiseService.get('http://private-34927-authapp.apiary-mock.com/users')
+    this.homePromiseService.getUser()
                            .then(
                              users => this.users = users,
                              error =>  this.errorMessage = <any>error);
+  }
+  logout() {
+    localStorage.removeItem('accessToken');
+    this.router.navigate(['/start']);
   }
 }
 
