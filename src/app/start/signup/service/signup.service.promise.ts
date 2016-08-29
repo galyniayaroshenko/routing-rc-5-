@@ -15,9 +15,9 @@ export class SignupPromiseService {
 
   getUsers (): Promise<User[]> {
     return this.http.get(this.usersUrl)
-                    .toPromise()
-                    .then(this.extractData)
-                    .catch(this.handleError);
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError);
   }
 
   addUser ( email, password, firstName, lastName ): Promise<User> {
@@ -26,9 +26,9 @@ export class SignupPromiseService {
   let options = new RequestOptions({ headers: headers });
 
   return this.http.post(this.registerUserUrl, body, options)
-                  .toPromise()
-                  .then(this.extractData)
-                  .catch(this.handleError);
+    .toPromise()
+    .then(this.extractData)
+    .catch(this.handleError);
   }
 
   private extractData(res: Response) {

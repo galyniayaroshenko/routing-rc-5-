@@ -1,6 +1,6 @@
 export const authProviders = [];
 
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule }   from '@angular/router';
 
 import { SignupPromiseComponent } from './component/signup.component.promise';
 

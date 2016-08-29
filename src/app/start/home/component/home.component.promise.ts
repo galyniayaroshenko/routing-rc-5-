@@ -1,6 +1,6 @@
 import { Component, OnInit }        from '@angular/core';
 import { Router,
-         NavigationExtras } from '@angular/router';
+         NavigationExtras }         from '@angular/router';
 
 import { HomePromiseService }       from '../service/home.service.promise';
 
@@ -21,9 +21,9 @@ export class HomePromiseComponent implements OnInit {
 
   getUsers() {
     this.homePromiseService.getUser()
-                           .then(
-                             users => this.users = users,
-                             error =>  this.errorMessage = <any>error);
+      .then(
+        users => this.users = users,
+        error =>  this.errorMessage = <any>error);
   }
   logout() {
     localStorage.removeItem('accessToken');
@@ -42,9 +42,9 @@ export class HomePromiseComponent implements OnInit {
 
 // import { Component, OnInit }        from '@angular/core';
 // import { Router,
-//          NavigationExtras } from '@angular/router';
+//          NavigationExtras }         from '@angular/router';
 
-//  import { Service }       from '../../../service/service';
+//  import { Service }                 from '../../../service/service';
 
 // @Component({
 //   templateUrl: '../view/home.html',
@@ -57,15 +57,15 @@ export class HomePromiseComponent implements OnInit {
 //   users: any;
 //   mode = 'Promise';
 
-//   constructor (private homePromiseService: Service ) {}
+//   constructor (private service: Service ) {}
 
 //   ngOnInit() { this.getUsers(); }
 
 //   getUsers() {
     
-//     this.homePromiseService.getAll()
-//                      .then(
-//                        users => this.users = users,
-//                        error =>  this.errorMessage = <any>error);
+//   this.service.getAll()
+//     .then(
+//       users => this.users = users,
+//       error =>  this.errorMessage = <any>error);
 //   }
 // }

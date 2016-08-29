@@ -1,7 +1,7 @@
-import { NgModule }       from '@angular/core';
-import { CommonModule }   from '@angular/common'
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule }    from '@angular/forms';
+import { NgModule }            from '@angular/core';
+import { CommonModule }        from '@angular/common'
+import { BrowserModule }       from '@angular/platform-browser';
+import { FormsModule }         from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { SignupPromiseComponent }    from './component/signup.component.promise';

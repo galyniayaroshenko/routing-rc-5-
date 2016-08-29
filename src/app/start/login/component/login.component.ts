@@ -1,7 +1,7 @@
-import { Component, OnInit }        from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router,
-         NavigationExtras } from '@angular/router';
-import { Http, Headers } from '@angular/http';
+         NavigationExtras }  from '@angular/router';
+import { Http, Headers }     from '@angular/http';
 import {
   FORM_PROVIDERS,
   FORM_DIRECTIVES,
@@ -10,7 +10,7 @@ import {
   Validators
 } from '@angular/common';
          
-//  import { LoginService }      from '../service/login.service';
+// import { LoginService }      from '../service/login.service';
 
 @Component({
   templateUrl: '../view/login.html',
@@ -45,7 +45,7 @@ export class LoginComponent {
           alert(error.text());
           console.log(error.text());
         }
-      );
+     );
   }
 
 }

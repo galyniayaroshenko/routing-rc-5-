@@ -1,10 +1,10 @@
-import { Injectable }     from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Injectable }              from '@angular/core';
+import { Http, Response }          from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { Router,
-         NavigationExtras } from '@angular/router';
+         NavigationExtras }        from '@angular/router';
 
-import { User }           from './user';
+import { User } from './user';
 
 @Injectable()
 export class LoginService {
@@ -13,7 +13,7 @@ export class LoginService {
 
 //   private loginUrl = 'http://private-34927-authapp.apiary-mock.com/login';
    
- login(email, password) {
+  login(email, password) {
     // event.preventDefault();
     let body = JSON.stringify({ email, password });
     console.log(body);

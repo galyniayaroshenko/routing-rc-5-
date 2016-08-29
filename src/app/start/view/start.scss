@@ -1,31 +1,31 @@
 button {
-   text-transform: uppercase;
-   outline: 0;
-   width: 100%;
-   border: 0;
-   padding: 15px;
-   color: #FFFFFF;
-   font-size: 14px;
-   -webkit-transition: all 0.3 ease;
-     transition: all 0.3 ease;
-   cursor: pointer;
-   &:hover, &:active, &:focus {
-     background: #43A047;
-   }
+  border: 0;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-size: 14px;
+  text-transform: uppercase;
+  outline: 0;
+  padding: 15px;
+  -webkit-transition: all 0.3 ease;
+    transition: all 0.3 ease;
+  width: 100%;
+  &:hover, &:active, &:focus {
+    background: #43A047;
+  }
 }
 .login{
-    @extend button;
-    width: 10%;
-    background: #000;
-    &:hover, &:active, &:focus {
-      background: #333;
-    }  
-  }
-  .signup{
-    @extend button;
-    width: 10%;
-    background: #000;
-    &:hover, &:active, &:focus {
-      background: #333;
-    }  
- }
+  @extend button;
+  background: #000;
+  width: 10%;
+  &:hover, &:active, &:focus {
+    background: #333;
+  }  
+}
+.signup{
+  @extend button;
+  background: #000;
+  width: 10%;
+  &:hover, &:active, &:focus {
+    background: #333;
+  }  
+}

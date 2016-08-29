@@ -1,5 +1,5 @@
-import { Injectable }     from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Injectable }              from '@angular/core';
+import { Http, Response }          from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 
 import { User }           from './user';
@@ -9,13 +9,13 @@ export class HomePromiseService {
   constructor (private http: Http) {}
 
   // private usersUrl = 'app/users.json';  
-private usersUrl = 'http://private-34927-authapp.apiary-mock.com/users';
+  private usersUrl = 'http://private-34927-authapp.apiary-mock.com/users';
 
   getUser (): Promise<User[]> {
     return this.http.get(this.usersUrl)
-                    .toPromise()
-                    .then(this.extractData)
-                    .catch(this.handleError);
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError);
   }
 
   private extractData(res: Response) {

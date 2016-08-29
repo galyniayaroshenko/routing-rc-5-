@@ -9,7 +9,7 @@ import { LoginComponent } from './login/component/login.component'
 
 const startRoutes: Routes = [
   { path: 'start', component: StartComponent,
-   children: [
+    children: [
       { path: 'login',  component: LoginComponent }
     ]
  },

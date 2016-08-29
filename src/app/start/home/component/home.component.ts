@@ -1,9 +1,9 @@
 // import { Component, OnInit }        from '@angular/core';
 // import { Router,
-//          NavigationExtras } from '@angular/router';
+//          NavigationExtras }         from '@angular/router';
 
-// import { User}          from '../service/user';
-// import { HomeService }       from '../service/home.service'
+// import { User}                      from '../service/user';
+// import { HomeService }              from '../service/home.service'
 
 // const styles   = require('../view/home.scss');
 // const template = require('../view/home.html');
@@ -25,9 +25,9 @@
 
 //   getUsers() {
 //     this.homeService.getUser()
-//                      .subscribe(
-//                        users => this.users = users,
-//                        error =>  this.errorMessage = <any>error);
+//       .subscribe(
+//         users => this.users = users,
+//         error =>  this.errorMessage = <any>error);
 //   }
   
 // }

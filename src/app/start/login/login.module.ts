@@ -4,7 +4,7 @@ import { FormsModule }    from '@angular/forms';
 
 import { LoginComponent }    from './component/login.component';
 
-import { loginRouting } from './login.routing';
+import { loginRouting }      from './login.routing';
 
 @NgModule({
   imports: [
