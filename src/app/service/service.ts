@@ -1,20 +1,20 @@
-import { Injectable, OnInit }         from '@angular/core';
+// import { Injectable, OnInit }         from '@angular/core';
 
-// import { User }               from './user';
-import { OverPromiseService } from './http.service';
+// // import { User }               from './user';
+// import { HTTPPromiseService } from './http.service';
 
-@Injectable()
-export class Service {
-  errorMessage: string;
-//   users: any;
-  constructor (private overPromiseService: OverPromiseService) { }
+// @Injectable()
+// export class Service {
+//   errorMessage: string;
+// //   users: any;
+//   constructor (private httpPromiseService: HTTPPromiseService) { }
  
-  getAll() {
-    return this.overPromiseService.get('http://private-34927-authapp.apiary-mock.com/users');
-  }
+//   getAll() {
+//     return this.httpPromiseService.get('http://private-34927-authapp.apiary-mock.com/users');
+//   }
 
-//  signup(firstName, lastName, email, birth) {
-//    let body = JSON.stringify({ firstName, lastName, email, birth });
-//    return this.overPromiseService.post('http://private-34927-authapp.apiary-mock.com/register', body);
-//  }
-}
+// //  signup(firstName, lastName, email, birth) {
+// //    let body = JSON.stringify({ firstName, lastName, email, birth });
+// //    return this.httpPromiseService.post('http://private-34927-authapp.apiary-mock.com/register', body);
+// //  }
+// }

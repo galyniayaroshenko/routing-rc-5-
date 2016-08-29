@@ -8,4 +8,6 @@ if (process.env.ENV === 'build') {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule);
+platformBrowserDynamic().bootstrapModule(AppModule).catch(error => {
+  console.log(error);
+});

@@ -3,6 +3,7 @@ import { HttpModule, JsonpModule, XHRBackend } from '@angular/http';
 
 import { AppComponent }  from './app.component';
 import { routing }       from './app.routing';
+// import { ApiConfig }       from './api.config';
 
 import { InMemoryBackendService, 
          SEED_DATA } from 'angular2-in-memory-web-api';
