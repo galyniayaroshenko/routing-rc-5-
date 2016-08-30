@@ -7,15 +7,15 @@ import '../style/app.scss';
 @Component({
   selector: 'my-app',
   templateUrl: './app.html',
-  providers: [ HttpExtService ]
+  providers: [HttpExtService ]
 })
 
 export class AppComponent implements OnInit {
-  constructor(private httpExtService: HttpExtService) {}
+  constructor(private httpExtService : HttpExtService ) {}
 
   ngOnInit() {
-    this.httpExtService.get('http://private-34927-authapp.apiary-mock.com/users').OK(data => {
-      console.log('data', data);
+    this.httpExtService.get('/users').OK(data => {
+      console.log('data!', data);
     });
   }
 }

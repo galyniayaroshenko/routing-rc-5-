@@ -3,7 +3,8 @@ import { HttpModule, JsonpModule, XHRBackend } from '@angular/http';
 
 import { AppComponent }  from './app.component';
 import { routing }       from './app.routing';
-// import { ApiConfig }       from './api.config';
+// import { AppSettings }   from './config';
+// import { HttpMethods }          from './httpMethods';
 
 import { InMemoryBackendService, 
          SEED_DATA } from 'angular2-in-memory-web-api';
@@ -26,10 +27,11 @@ import { StartModule }  from './start/start.module';
     AppComponent
   ],
     providers: [
-      // { provide(API_ENDPOINT, { useValue ='http://private-34927-authapp.apiary-mock.com'}) }
+    // {provide(API_ENDPOINT, { useValue='http://private-34927-authapp.apiary-mock.com/' })}
+    // { provide: , useClass: AppSettings } 
     // { provide: XHRBackend, useClass: InMemoryBackendService } 
   ],
-  bootstrap: [ AppComponent ]
+  bootstrap: [ AppComponent  ]
 })
 export class AppModule {
 }
