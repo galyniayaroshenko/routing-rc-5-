@@ -27,7 +27,7 @@ import { StartModule }  from './start/start.module';
     AppComponent
   ],
     providers: [
-    // {provide(API_ENDPOINT, { useValue='http://private-34927-authapp.apiary-mock.com/' })}
+    // { provide(API_ENDPOINT, { useValue='http://private-34927-authapp.apiary-mock.com/' }) }
     // { provide: , useClass: AppSettings } 
     // { provide: XHRBackend, useClass: InMemoryBackendService } 
   ],

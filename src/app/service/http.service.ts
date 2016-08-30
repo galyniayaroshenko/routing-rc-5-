@@ -9,7 +9,7 @@ import {
 import { Router,
          NavigationExtras }         from '@angular/router';
 
-// import { CONFIG } from '../config';
+// import { HttpConfigService } from './http-config.service';
 import { CONFIG } from './http-config.service'
 
 @Injectable()
@@ -67,15 +67,6 @@ class HttpRequest {
   } 
 
   /* private methods */
-  // private defaultHandlers(response: any) {
-  //   const responseStatus = response;
-  //   // const responseStatusData = responseStatus.split(':'); 
-  //   // if (responseStatus) {
-
-  //   // }
-  //   console.log('responseStatus', responseStatus);
-  // } 
-
   private errorHandle(response: any) { // !! any -> Response
     this.handlerGet(response).error(response);
   }
@@ -88,10 +79,10 @@ class HttpRequest {
   }
 
   private handlerGet(response: any): any {    
-    var handler = this.handlers[response.status] || CONFIG.defaultHandlers[response.status];
+    var handler = this.handlers[response.status] || CONFIG.defaultHandlers[response.status]();
     console.log('CONFIG.defaultHandlers[response.status]', CONFIG.defaultHandlers[response.status]);
     console.log('response.status', response.status);
-
+    // CONFIG.defaultHandlers[response.status]();
     if (handler) {
       return handler;
     }
