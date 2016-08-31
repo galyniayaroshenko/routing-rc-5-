@@ -20,8 +20,8 @@ export class HomePromiseService {
 
   private extractData(res: Response) {
     let body = res.json();
-    console.log('body', body);
-    console.log('body.data', body.data[0].firstName);
+    // console.log('body', body);
+    // console.log('body.data', body.data[0].firstName);
     return body.data || { };
   }
 

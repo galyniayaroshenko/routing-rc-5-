@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 
 import { 
   Http, 
@@ -6,33 +6,47 @@ import {
   Headers, 
   RequestOptions 
 } from '@angular/http';
-import { Router,
-         NavigationExtras }         from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 
-// import { HttpConfigService } from './http-config.service';
-import { CONFIG } from './http-config.service'
+import { HttpConfigService } from './http-config.service'
 
 @Injectable()
 export class HttpExtService {
-  constructor (private http: Http, public router: Router) {}
+  constructor (
+    private http: Http, 
+    public router: Router, 
+    private httpConfigService: HttpConfigService
+  ) {}
 
   delete(url: string): HttpRequest {
-    return new HttpRequest(this.http.delete(`${CONFIG.apiUrl}${url}`).toPromise());
+    return new HttpRequest(
+      this.http.delete(`${this.httpConfigService.apiUrl}${url}`).toPromise(),
+      this.httpConfigService.defaultHandlers
+    );
   }
   get(url: string): HttpRequest {
-    return new HttpRequest(this.http.get(`${CONFIG.apiUrl}${url}`).toPromise());
+    return new HttpRequest(
+      this.http.get(`${this.httpConfigService.apiUrl}${url}`).toPromise(), 
+      this.httpConfigService.defaultHandlers
+    );
   }
   post(url: string, data: Object): HttpRequest {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers });
 
-    return new HttpRequest(this.http.post(`${CONFIG.apiUrl}${url}`, options).toPromise());
+    return new HttpRequest(
+      this.http.post(`${this.httpConfigService.apiUrl}${url}`, options).toPromise(), 
+      this.httpConfigService.defaultHandlers
+    );
   }
   put(url: string, data: Object): HttpRequest {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers });
 
-    return new HttpRequest(this.http.put(`${CONFIG.apiUrl}${url}`, options).toPromise());
+    return new HttpRequest(
+      this.http.put(`${this.httpConfigService.apiUrl}${url}`, options).toPromise(), 
+      this.httpConfigService.defaultHandlers
+    );
   }
 }
 
@@ -42,11 +56,10 @@ const httpCodes = {
   BAD_REQUEST: 400
 }
 
-class HttpRequest {           
-
+class HttpRequest {          
   private handlers: Object;
 
-  constructor (private httpPromise: Promise<any>) {
+  constructor (private httpPromise: Promise<any>, private defaultHandlers: any) {
     this.handlers = {};
 
     httpPromise.then(
@@ -79,8 +92,8 @@ class HttpRequest {
   }
 
   private handlerGet(response: any): any {    
-    var handler = this.handlers[response.status] || CONFIG.defaultHandlers[response.status]();
-    console.log('CONFIG.defaultHandlers[response.status]', CONFIG.defaultHandlers[response.status]);
+    var handler = this.handlers[response.status] || this.defaultHandlers[response.status]();
+    // console.log('CONFIG.defaultHandlers[response.status]', this.defaultHandlers[response.status]());
     console.log('response.status', response.status);
     // CONFIG.defaultHandlers[response.status]();
     if (handler) {
@@ -100,8 +113,8 @@ class HttpRequest {
     // })
 
     const [status, substatus] = responseBody.status.split(':');
-    console.log('status', status);
-    console.log('substatus', substatus);
+    // console.log('status', status);
+    // console.log('substatus', substatus);
     
 
     switch (status) {
