@@ -26,12 +26,12 @@ export class HttpConfigService {
         console.log('Not founded'); 
         return this.router.navigate(['/start']);
       },
-      400: () => { 
-        console.log('bad');
-        return this.router.navigate(['/start']);
-      },
       401: () => { 
         console.log('Unantorized');
+        return this.router.navigate(['/start']);
+      },
+      400: () => { 
+        console.log('bad');
         return this.router.navigate(['/start']);
       },
       201: () => {

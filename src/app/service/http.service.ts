@@ -1,3 +1,4 @@
+var validate = require("validate.js");
 import { Injectable, Inject } from '@angular/core';
 
 import { 
@@ -93,9 +94,6 @@ class HttpRequest {
 
   private handlerGet(response: any): any {    
     var handler = this.handlers[response.status] || this.defaultHandlers[response.status]();
-    // console.log('CONFIG.defaultHandlers[response.status]', this.defaultHandlers[response.status]());
-    console.log('response.status', response.status);
-    // CONFIG.defaultHandlers[response.status]();
     if (handler) {
       return handler;
     }
@@ -103,9 +101,35 @@ class HttpRequest {
     throw new Error(`Unexpected response status: ${response.status}`);
   }
 
+  private objectValidator(response) {
+    const responseBody = response.json();
+    
+    let constraints = {
+      status: {
+        presence: true,
+        exclusion: {
+          within: ['OK', 'ERROR:general', 'ERROR:target'],
+          message: "'%{value}' is allowed"
+        }
+      }
+    };
+
+    let funcResult = validate({status: responseBody.status}, constraints);
+    let objectResult = validate.isObject(responseBody.data);
+    let arrayResult = validate.isArray(responseBody.data);
+
+    if (funcResult == undefined || objectResult != true || arrayResult != true) {
+      console.log('!!!bad');
+    } else {
+      console.log('smile!');
+    }
+  }
+
   private successHandle(response) {
     const responseBody = response.json();
     const handler = this.handlerGet(response);
+
+    this.objectValidator(response);
 
     // validator.objectValidate(responseBody, {
     //   status: [String, ['OK', 'ERROR:general', 'ERROR:target']],
@@ -113,9 +137,6 @@ class HttpRequest {
     // })
 
     const [status, substatus] = responseBody.status.split(':');
-    // console.log('status', status);
-    // console.log('substatus', substatus);
-    
 
     switch (status) {
       case 'OK':

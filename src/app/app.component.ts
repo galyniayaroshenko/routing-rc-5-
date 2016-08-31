@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.httpExtService.get('/userss')/*.OK(data => {
+    this.httpExtService.get('/users')/*.OK(data => {
       console.log('data!!!', data);
     });*/
   }
