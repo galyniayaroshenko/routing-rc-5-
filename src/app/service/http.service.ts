@@ -10,7 +10,8 @@ import {
 } from '@angular/http';
 import { Router, NavigationExtras } from '@angular/router';
 
-import { HttpConfigService } from './http-config.service'
+import { HttpConfigService } from './http-config.service';
+import { ObjectValidatorService } from './object-validator.service';
 
 @Injectable()
 export class HttpExtService {
@@ -102,36 +103,42 @@ class HttpRequest {
     throw new Error(`Unexpected response status: ${response.status}`);
   }
 
-  private objectValidator(response) {
-    const responseBody = response.json();
-    
-    let constraints = {
-      status: {
-        presence: true,
-        exclusion: {
-          within: ['OK', 'ERROR:general', 'ERROR:target'],
-          message: "'%{value}' is allowed"
-        }
-      }
-    };
+  // private objectValidator(response) {
 
-    let funcResult = validate({status: responseBody.status}, constraints);
-    let objectResult = validate.isObject(responseBody.data);
-    let arrayResult = validate.isArray(responseBody.data);
+  //   let constraints = {
+  //     status: {
+  //       presence: true,
+  //       exclusion: {
+  //         within: ['OK', 'ERROR:general', 'ERROR:target'],
+  //         message: "'%{value}' is allowed"
+  //       }
+  //     }
+  //   };
 
-    if (funcResult == undefined || objectResult == false || arrayResult == false)
-      return false;
-      return true;
-  }
+  //   let funcResult = validate({status: response.status}, constraints);
+  //   let objectResult = validate.isObject(response.data);
+  //   let arrayResult = validate.isArray(response.data);
+
+  //   if (funcResult == undefined || objectResult == false || arrayResult == false)
+  //     return false;
+  //     return true;
+  // }
 
   private successHandle(response) {
     const responseBody = response.json();
     const handler = this.handlerGet(response);
-    const resutlObjectValidator = this.objectValidator(response);
 
-    if (resutlObjectValidator == false) {
-      throw new Error(`!Unexpected response body: ${responseBody}`);
-    }
+    // const resutlObjectValidator = this.objectValidator(responseBody);
+
+    // if (resutlObjectValidator == false) {
+    //   throw new Error(`!Unexpected response body: ${responseBody}`);
+    // }
+
+    // validator.objectValidate(responseBody, {
+    //   status: [String, ['OK', 'ERROR:general', 'ERROR:target']],
+    //   data: [Object, Array]
+    // })
+    
     
     const [status, substatus] = responseBody.status.split(':');
 

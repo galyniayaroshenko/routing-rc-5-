@@ -2,10 +2,10 @@ export const authProviders = [];
 
 import { Routes, RouterModule }   from '@angular/router';
 
-import { SignupPromiseComponent } from './component/signup.component.promise';
+import { SignupComponent } from './component/signup.component';
 
 const signupRoutes: Routes = [
-  { path: 'signup', component: SignupPromiseComponent }
+  { path: 'signup', component: SignupComponent }
 ];
 
 export const signupRouting = RouterModule.forChild(signupRoutes);

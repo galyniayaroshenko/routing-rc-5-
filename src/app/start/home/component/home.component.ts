@@ -3,10 +3,14 @@ import { Router,
          NavigationExtras }         from '@angular/router';
 
 import { HomeService }                 from '../service/home.service';
+// import { HttpExtService } from '../../../service/http.service';
+// import { HttpConfigService } from '../../../service/http-config.service';
+import { ObjectValidatorService } from '../../../service/object-validator.service';
 
 @Component({
   templateUrl: '../view/home.html',
-  styleUrls: [ '../view/home.scss' ]
+  styleUrls: [ '../view/home.scss' ],
+  providers: [ ObjectValidatorService, HomeService]
 })
 
 export class HomeComponent implements OnInit {
@@ -14,7 +18,7 @@ export class HomeComponent implements OnInit {
   users: any;
   mode = 'Promise';
 
-  constructor (private homeService: HomeService ) {}
+  constructor (private homeService: HomeService, private ObjectValidatorService: ObjectValidatorService ) {}
 
   ngOnInit() { this.getUsers(); }
 
@@ -24,5 +28,17 @@ export class HomeComponent implements OnInit {
       this.users = data;
       //console.log('this.users', this.users);
     });
+    //this.ObjectValidatorService.validate();
+    console.log('this.ObjectValidatorService.validate();', 
+    this.ObjectValidatorService.validate({status: 'response.status'}, 
+    {
+      status: {
+        presence: true,
+        exclusion: {
+          within: ['OK', 'ERROR:general', 'ERROR:target']
+        }
+      }
+    }));
+     
   }
 }
