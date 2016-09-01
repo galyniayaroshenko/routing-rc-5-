@@ -1,33 +1,28 @@
-// import { Component, OnInit }        from '@angular/core';
-// import { Router,
-//          NavigationExtras }         from '@angular/router';
+import { Component, OnInit }        from '@angular/core';
+import { Router,
+         NavigationExtras }         from '@angular/router';
 
-// import { User}                      from '../service/user';
-// import { HomeService }              from '../service/home.service'
+import { HomeService }                 from '../service/home.service';
 
-// const styles   = require('../view/home.scss');
-// const template = require('../view/home.html');
+@Component({
+  templateUrl: '../view/home.html',
+  styleUrls: [ '../view/home.scss' ]
+})
 
-// @Component({
-//   template: template,
-//   styles: [ styles ],
-//   providers: [ HomeService ]
-// })
+export class HomeComponent implements OnInit {
+  errorMessage: string;
+  users: any;
+  mode = 'Promise';
 
-// export class HomeComponent implements OnInit {
-//   errorMessage: string;
-//   users: User[];
-//   mode = 'Observable';
+  constructor (private homeService: HomeService ) {}
 
-//   constructor (private homeService: HomeService) {}
+  ngOnInit() { this.getUsers(); }
 
-//   ngOnInit() { this.getUsers(); }
-
-//   getUsers() {
-//     this.homeService.getUser()
-//       .subscribe(
-//         users => this.users = users,
-//         error =>  this.errorMessage = <any>error);
-//   }
-  
-// }
+  getUsers() {
+    this.users = [];
+    this.homeService.getAll().OK(data => {
+      this.users = data;
+      //console.log('this.users', this.users);
+    });
+  }
+}

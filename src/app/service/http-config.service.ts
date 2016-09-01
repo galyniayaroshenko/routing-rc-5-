@@ -10,13 +10,10 @@ export class HttpConfigService {
     this.apiUrl = 'http://private-34927-authapp.apiary-mock.com';
     this.defaultHandlers = {
       // BAD_REQUEST: () => {
-      //   return this.router.navigate(['/start']);
       // },
       // CREATED: () => {
-      //   return 201;
       // },
-      // OK: () => {
-      //   return 200;        
+      // OK: () => {       
       // }
       501: () => {
         console.log('Not implemented'); 
@@ -31,12 +28,12 @@ export class HttpConfigService {
         return this.router.navigate(['/start']);
       },
       400: () => { 
-        console.log('bad');
+        console.log('Bad request');
         return this.router.navigate(['/start']);
       },
       201: () => {
         console.log('created');
-        return this.router.navigate(['/home'])
+        return this.router.navigate(['/start/login'])
       },
       200: () => {
         console.log('ok'); 

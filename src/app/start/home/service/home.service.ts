@@ -1,31 +1,19 @@
-// import { Injectable }              from '@angular/core';
-// import { Http, Response }          from '@angular/http';
-// import { Headers, RequestOptions } from '@angular/http';
+import { Injectable, OnInit }         from '@angular/core';
 
-// import { User }           from './user';
-// import { Observable }     from 'rxjs/Observable';
+import { HttpExtService } from '../../../service/http.service';
 
-// @Injectable()
-// export class HomeService {
-//   constructor (private http: Http) {}
+@Injectable()
+export class HomeService implements OnInit{
 
-//   private usersUrl = 'app/users';  // URL to web API
+  constructor (private httpExtService: HttpExtService) { }
+ 
+  ngOnInit() { this.getAll(); }
 
-//   getUser (): Observable<User[]> {
-//     return this.http.get(this.usersUrl)
-//       .map(this.extractData)
-//       .catch(this.handleError);
-//   }
-
-//   private extractData(res: Response) {
-//     let body = res.json();
-//     return body.data || { };
-//   }
-
-//   private handleError (error: any) {
-//     let errMsg = (error.message) ? error.message :
-//       error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-//     console.error(errMsg); // log to console instead
-//     return Observable.throw(errMsg);
-//   }
-// }
+  getAll() {
+    return this.httpExtService.get('/users')
+  }
+//  signup(firstName, lastName, email, birth) {
+//    let body = JSON.stringify({ firstName, lastName, email, birth });
+//    return this.httpPromiseService.post('http://private-34927-authapp.apiary-mock.com/register', body);
+//  }
+}

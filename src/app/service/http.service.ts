@@ -1,5 +1,6 @@
-var validate = require("validate.js");
+let validate = require("validate.js");
 import { Injectable, Inject } from '@angular/core';
+// import { validate } from 'validate.js';
 
 import { 
   Http, 
@@ -118,24 +119,20 @@ class HttpRequest {
     let objectResult = validate.isObject(responseBody.data);
     let arrayResult = validate.isArray(responseBody.data);
 
-    if (funcResult == undefined || objectResult != true || arrayResult != true) {
-      console.log('!!!bad');
-    } else {
-      console.log('smile!');
-    }
+    if (funcResult == undefined || objectResult == false || arrayResult == false)
+      return false;
+      return true;
   }
 
   private successHandle(response) {
     const responseBody = response.json();
     const handler = this.handlerGet(response);
+    const resutlObjectValidator = this.objectValidator(response);
 
-    this.objectValidator(response);
-
-    // validator.objectValidate(responseBody, {
-    //   status: [String, ['OK', 'ERROR:general', 'ERROR:target']],
-    //   data: [Object, Array]
-    // })
-
+    if (resutlObjectValidator == false) {
+      throw new Error(`!Unexpected response body: ${responseBody}`);
+    }
+    
     const [status, substatus] = responseBody.status.split(':');
 
     switch (status) {
