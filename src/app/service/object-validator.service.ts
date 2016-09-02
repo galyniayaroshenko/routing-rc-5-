@@ -12,11 +12,12 @@ export class ObjectValidatorService {
     // this.constraints = constraints;
     let result = [];
     let message = {};
-    let res = {};
-    let resD = {};
-    let options = {};
 
-    let attr = {status: 'OK'};
+    let attr = {status: 
+                  { 
+                    asd: {asd: 'cds'}
+                  }
+              };
 
     let con = {
       status: {
@@ -25,12 +26,23 @@ export class ObjectValidatorService {
           within: ['OK', 'ERROR:general', 'ERROR:target']
         },
         inclusion: {
-          within: ['smile', 'OK']
+          within: ['smile', 'OK', 'asd']
         },
-        length: {
-          min: 3,
-          max: 10,
+        type: {
+          within: ['Object']
+        },
+        deeplyType: {
+          exclusion: {
+            within: ['qwerty']
+          },
+          inclusion: {
+            within: ['bad', 'asd']
+          },
+          type: {
+            within: ['Object']
+          }
         }
+
       },
       date: {
         presence: false,
@@ -40,13 +52,46 @@ export class ObjectValidatorService {
         inclusion: {
           within: ['bad']
         },
-        length: {
-          min: 5,
-          max: 15,
+        type: {
+          within: ['Array', 'Object']
         }
       }
 
     };
+
+    if (
+      this.isArray(attr.status) || 
+      this.isObject(attr.status) || 
+      this.isBoolean(attr.status) ||
+      this.isString(attr.status) || 
+      this.isNumber(attr.status))
+      {
+      if(this.isDefined(con.status.type)) {
+        message = this.type(attr.status, con.status.type.within);
+        result.push(message);
+      }
+    } 
+
+    // else {
+    //   throw new Error(`Unexpected response body: ${attr.status}`); 
+    // }
+
+    if(this.isObject(attr.status) && this.isDefined(con.status.deeplyType)) {
+      if(this.isDefined(con.status.deeplyType.exclusion)) {
+        message = this.exclusion(attr.status.asd, con.status.deeplyType.exclusion.within);
+        result.push(message);
+      }
+      if(this.isDefined(con.status.deeplyType.inclusion)) {
+        message = this.inclusion(attr.status.asd, con.status.deeplyType.inclusion.within);
+        result.push(message);
+      }
+      if(this.isDefined(con.status.deeplyType.type)) {   
+        message = this.type(attr.status.asd, con.status.deeplyType.type.within);
+        result.push(message);
+      }
+    }
+
+
 
     if(con.status.presence == true) {
       message = this.presence(attr.status);
@@ -60,12 +105,62 @@ export class ObjectValidatorService {
       message = this.inclusion(attr.status, con.status.inclusion.within);
       result.push(message);
     }
-    if(this.isDefined(con.status.length)) {
-      message = this.length(attr.status, con.status.length.min, con.status.length.max);
+
+    if(con.status.presence == true) {
+       message = typeof attr.status;
       result.push(message);
     }
     return result;
     
+  }
+  public type(value, options) {
+    let message;
+    // if (this.isEmpty(value)) {
+    //   return;
+    // }
+    for (let i = 0; i < options.length; i++) {
+      
+      switch (options[i]) {
+        case 'Array': 
+          if (this.isArray(value)){
+            message = { message: `${value} is Array` };
+          } else {
+            message = { message: `${value} is not Array` };
+          }
+          break;
+        case 'Object':
+          if (this.isObject(value)){
+            message = { message: `${value} is Object` };
+          } else {
+            message = { message: `${value} is not Object` };
+          }
+          break;
+        case 'Boolean':
+          if (this.isBoolean(value)){
+            message = { message: `${value} is Boolean` };
+          } else {
+            message = { message: `${value} is not Boolean` };
+          }
+          break;
+        case 'String':
+          if (this.isString(value)){
+            message = { message: `${value} is String` };
+          } else {
+            message = { message: `${value} is not String` };
+          }
+          break;
+        case 'Number':
+          if (this.isNumber(value)){
+            message = { message: `${value} is Number` };
+          } else {
+            message = { message: `${value} is not Number` };
+          }
+          break;
+        default:
+          throw new Error(`Unexpected response body: ${value}`);    
+      }
+    }
+    return message;
   }
 
   public inclusion(value, options) {
@@ -78,10 +173,10 @@ export class ObjectValidatorService {
     }
     options = this.extend(options);
     if (this.contains(options.within, value)) {
-      message = {message: `${value} fine`};
+      message = {message: `${value} is included in the list`};
       return message;
     }
-      message = {message: `${value} is not included in the list`};
+      message = {message: `${value} is not included in the list!!`};
       return message;
   }
 
@@ -95,10 +190,10 @@ export class ObjectValidatorService {
     }
     options = this.extend(options);
     if(!this.contains(options.within, value)) {
-      message = {message: `${value} fine`};
+      message = {message: `${value} may contain`};
       return message;
     }
-      message = {message: `${value} is restricted`};
+      message = {message: `is restricted`};
       return message;
   }
 
@@ -108,8 +203,8 @@ export class ObjectValidatorService {
         message = {message: `field must be filled!!!`};
         return message;
       }
-      message = {message: `supper`};
-      return message;
+        message = {message: `supper`};
+        return message;
   }
 
   private contains(obj, value) {
@@ -124,19 +219,24 @@ export class ObjectValidatorService {
 
   private isEmpty(value) {
     let attr;
-    if (this.isDefined(value)) {
-      return true;
-    }
+    // if (this.isDefined(value)) {
+    //   return true;
+    // }
     if (this.isFunction(value)) {
       return false;
     }
     if (this.isString(value)) {
       return false;
     }
+
     if (this.isArray(value)) {
       return value.length === 0;
     }
+
     if (this.isDate(value)) {
+      return false;
+    }
+    if(this.isBoolean(value)) {
       return false;
     }
     if (this.isObject(value)) {
@@ -154,7 +254,7 @@ export class ObjectValidatorService {
   }
 
   private isDefined(obj) {
-    return typeof obj == "object" && typeof obj !== null && obj != undefined;
+    return typeof obj !== null && obj != undefined;
   }
   private isFunction (value) {
     return typeof value === 'function';
@@ -171,6 +271,9 @@ export class ObjectValidatorService {
   private isNumber(value) {
     return typeof value === 'number' && !isNaN(value);
   }
+  private isBoolean(value) {
+    return typeof value === 'boolean';
+  }
   private extend(obj) {
     [].slice.call(arguments, 1).forEach(function(source) {
       for (var attr in source) {
@@ -179,69 +282,6 @@ export class ObjectValidatorService {
     });
     return obj;
   };
-
-  private length(value, min, max) {
-    let message;
-    let minimum = min;
-    let maximum = max;
-    
-    if (this.isEmpty(value)) {
-      return;
-    }
-    
-    var length = value.length;
-    if(!this.isNumber(length)) {
-      return message = {message: 'has an incorrect length'}
-    }
-
-    if(this.isNumber(minimum) && length < minimum) {
-      return message = {message: `is too short (minimum is ${minimum} characters)`}
-    }
-
-    if(this.isNumber(maximum) && length > maximum) {
-      return message = {message: `is too long (maximum is ${maximum} characters)`}
-    }
-      return message = {message: `is cool length ${length}`}
-  }
-
-
-
-  
-  // private isEmpty(obj) {
-  //   if (obj == null) return true;
-  //   if (obj.length > 0) return false;
-  //   if (obj.length === 0) return true;
-
-  //   if (typeof obj !== "object") return true;
-
-  //   for (var key in obj) {
-  //       if (Object.prototype.hasOwnProperty.call(obj, key)) return false;
-  //   }
-  //   return true;
-  // }
-
-  // private copyObject(obj) {
-  //   var copy = {};
-  //   for (var key in obj) {
-  //     copy[key] = obj[key];
-  //   }
-  //   return copy;
-  // };
-
-  // private deepCopy(obj) {
-  //   if (typeof obj != "object") {
-  //       return obj;
-  //   }
-  //   var copy = obj.constructor();
-  //   for (var key in obj) {
-  //       if (typeof obj[key] == "object") {
-  //           copy[key] = this.deepCopy(obj[key]);
-  //       } else {
-  //           copy[key] = obj[key];
-  //       }
-  //   }
-  //   return copy;
-  // };
 }
 
 

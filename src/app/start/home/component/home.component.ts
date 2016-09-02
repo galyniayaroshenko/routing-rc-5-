@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
   users: any;
   mode = 'Promise';
 
-  constructor (private homeService: HomeService, private ObjectValidatorService: ObjectValidatorService ) {}
+  constructor (private homeService: HomeService, private objectValidatorService: ObjectValidatorService ) {}
 
   ngOnInit() { this.getUsers(); }
 
@@ -26,11 +26,11 @@ export class HomeComponent implements OnInit {
     this.users = [];
     this.homeService.getAll().OK(data => {
       this.users = data;
-      //console.log('this.users', this.users);
+      console.log('this.users', this.users);
     });
     //this.ObjectValidatorService.validate();
     console.log('this.ObjectValidatorService.validate();', 
-    this.ObjectValidatorService.validate({status: 'response.status'}, 
+    this.objectValidatorService.validate({status: 'response.status'}, 
     {
       status: {
         presence: true,
