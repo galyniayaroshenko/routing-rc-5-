@@ -14,178 +14,263 @@ export class ObjectValidatorService {
     let message = {};
 
     let attr = {
-      status: { 
-        asd: ['asd']
-      }
-      // data: ['sdf', 1]
+      status: [34, 'sad'],
+      data: [true, 'cds']
     };
 
     let con = {
-      // data: {
-      //   type: Array,
-      //   arrayValueType: String
-      // },
       status: {
         required: true,
-        exclusion: ['OK', 'ERROR:general', 'ERROR:target', 'asd'],
+        exclusion: ['OK', 'ERROR:general', 'ERROR:target', 'asd', 34, true],
         inclusion: ['smile', 'OK'],
-        type: 'df'
+        type: [],
+        arrayValueType: '',
+        range: [1, 10]
+      },
+      data: {
+        required: true,
+        exclusion: ['OK'],
+        inclusion: ['smile', 'OK'],
+        range: [1, 50],
+        type: [],
+        arrayValueType: ''
       }
     }
-  
 
-    // if(this.isObject(attr.status) && this.isDefined(con.status.deeplyType)) {
-    //   if(this.isDefined(con.status.deeplyType.exclusion)) {
-    //     message = this.exclusion(attr.status.asd, con.status.deeplyType.exclusion.within);
+    for (let key in con) {
+
+      if (!this.isEmpty(attr[key])) {
+
+        if(con[key].required === true) {
+          message = this.presence(attr[key]);
+          result.push(message);
+        }
+
+        if(this.isArray(attr[key]) || this.isObject(attr[key])) {
+
+          if(this.isDefined(con[key].type)) {
+            message = this.type(attr[key].constructor, con[key].type);
+            result.push(message);
+
+            if(this.isDefined(con[key].arrayValueType)) {
+
+                for (let key2 in attr[key]) {
+                    message = this.arrayValueType(attr[key][key2], con[key].arrayValueType);
+                    result.push(message);
+                }
+            } 
+              // else {
+              //   throw new Error(`Unexpected response body`);
+              // }
+
+          }
+        } else {
+
+          if(this.isDefined(con[key].type)) {
+            message = this.type(attr[key].constructor, con[key].type);
+            result.push(message);
+          }
+
+          if(this.isNumber(attr[key]) || this.isString(attr[key])) {
+            if(this.isDefined(con[key].exclusion)) {
+              message = this.exclusion(attr[key], con[key].exclusion);
+              result.push(message);
+            }
+            if(this.isDefined(con[key].inclusion)) {
+              message = this.inclusion(attr[key], con[key].inclusion);
+              result.push(message);
+            }
+          } 
+          // else {
+          //   throw new Error(`Unexpected response body`);
+          // }
+
+          if(this.isNumber(attr[key])) {
+            if(this.isDefined(con[key].range)) {
+              message = this.range(attr[key], con[key].range);
+              result.push(message);
+            }
+          } 
+          // else {
+          //   throw new Error(`Unexpected response body`);
+          // } 
+
+        }
+
+       
+        
+
+      }
+       
+     
+    }
+
+    // if (!this.isEmpty(attr.status)) {
+
+    //   if(con.status.required == true) {
+    //     message = this.presence(attr.status);
     //     result.push(message);
     //   }
-    //   if(this.isDefined(con.status.deeplyType.inclusion)) {
-    //     message = this.inclusion(attr.status.asd, con.status.deeplyType.inclusion.within);
+
+    //   if(this.isDefined(con.status.type)) {
+    //     message = this.type(attr.status.asd, con.status.type);
     //     result.push(message);
-    //   }
-    //   if(this.isDefined(con.status.deeplyType.type)) {   
-    //     message = this.type(attr.status.asd, con.status.deeplyType.type.within);
-    //     result.push(message);
-    //   }
-    // }
 
-    if (
-      (this.isArray(attr.status.asd) || 
-      this.isObject(attr.status.asd) || 
-      this.isBoolean(attr.status.asd) ||
-      this.isString(attr.status.asd) || 
-      this.isNumber(attr.status.asd)) && 
-      this.isDefined(con.status.type)) {
-        // alert(attr.status.asd);
-        // alert(con.status.type.constructor === Array);
-        message = this.type(attr.status.asd, con.status.type);
-        result.push(message);
-    } 
+    //     if(this.isDefined(con.status.arrayValueType)) {
+    //       message = this.arrayValueType(attr.status.asd, con.status.arrayValueType);
+    //       result.push(message);
+    //     } 
+    //     // else {
+    //     //   throw new Error(`Unexpected response body`);
+    //     // } 
+    //   }  
 
-    // else {
-    //   throw new Error(`Unexpected response body: ${attr.status}`); 
-    // }
+    //   if(this.isNumber(attr.status.asd) || this.isString(attr.status.asd)) {
+    //     if(this.isDefined(con.status.exclusion)) {
+    //       message = this.exclusion(attr.status.asd, con.status.exclusion);
+    //       result.push(message);
+    //     }
+    //     if(this.isDefined(con.status.inclusion)) {
+    //       message = this.inclusion(attr.status.asd, con.status.inclusion);
+    //       result.push(message);
+    //     }
+    //   } 
+    //   // else {
+    //   //   throw new Error(`Unexpected response body`);
+    //   // } 
 
-    if(con.status.required == true) {
-      message = this.presence(attr.status);
-      result.push(message);
-    }
-    if(this.isDefined(con.status.exclusion)) {
-      message = this.exclusion(attr.status.asd, con.status.exclusion);
-      result.push(message);
-    }
-    if(this.isDefined(con.status.inclusion)) {
-      message = this.inclusion(attr.status.asd, con.status.inclusion);
-      result.push(message);
-    }
-
-    // if(con.status.presence == true) {
-    //    message = typeof attr.status;
-    //   result.push(message);
+    //   if(this.isNumber(attr.status.asd)) {
+    //     if(this.isDefined(con.status.range)) {
+    //       message = this.range(attr.status.asd, con.status.range);
+    //       result.push(message);
+    //     }
+    //   } 
+    //   // else {
+    //   //   throw new Error(`Unexpected response body`);
+    //   // }
+    // } else {
+    //   throw new Error(`no body`);
     // }
     return result;
+  }
+
+  public range(value, options) {
+    let message;
+    let minimum = options[0];
+    let maximum = options[1];
+    let length = value;
+
+    if (this.isEmpty(value)) { 
+      return;
+    }
+    if(this.isNumber(minimum) && length < minimum) {
+      return message = {message: `is too short (minimum is ${minimum} characters)`}
+    }
     
+    if(this.isNumber(maximum) && length > maximum) {
+      return message = {message: `is too long (maximum is ${maximum} characters)`}
+    }
+
+    return message = {message: `is cool length ${length}`}
+  }
+  public arrayValueType(value, options) {
+    let message;
+    // alert(value);
+      switch (options.constructor) {
+        case String:
+        // for (let i = 0; i < value.length; i++) {
+          if (this.isString(value)){
+            message = { message: `${value} is String` };
+          } else {
+            message = { message: `${value} is not String` };
+          }
+        // }
+        break;
+        case Number:
+        // for (let i = 0; i < value.length; i++) {
+          if (this.isNumber(value)){
+            message = { message: `${value} is Number` };
+          } else {
+            message = { message: `${value} is not Number` };
+          }
+        // }
+        break;
+        case Object:
+        // for (let i = 0; i < value.length; i++) {
+          if (this.isObject(value)){
+            message = { message: `${value} is Object` };
+          } else {
+            message = { message: `${value} is not Object` };
+          }
+        // } 
+        break;
+        case Array:
+        // for (let i = 0; i < value.length; i++) {
+          if (this.isArray(value)){
+            message = { message: `${value} is Array` };
+          } else {
+            message = { message: `${value} is not Array` };
+          }
+        // } 
+        break;
+        case Boolean:
+        // for (let i = 0; i < value.length; i++) {
+          if (this.isBoolean(value)){
+            message = { message: `${value} is Boolean` };
+          } else {
+            return message = { message: `${value} is not Boolean` };
+          }
+        // } 
+        break;
+        default:
+          throw new Error(`Unexpected response body: ${value}`);
+      }
+    return message;
   }
   public type(value, options) {
     let message;
     // if (this.isEmpty(value)) {
     //   return;
     // }
-    alert(options.constructor === String);
     switch (options.constructor) {
       case Array:
-        for (let i = 0; i < options.length; i++) {
-          // alert(options[i].constructor == Array);
-          switch(options[i].constructor) {
-            case Array:
-              if (this.isArray(value)){
-                message = { message: `${value} is Array` };
-              } else {
-                message = { message: `${value} is not Array` };
-              }
-            break;
-            case Object:
-              if (this.isObject(value)){
-                message = { message: `${value} is Object` };
-              } else {
-                message = { message: `${value} is not Object` };
-              }
-            break;
-            default:
-              throw new Error(`Unexpected response body: ${value}`);
-          }
+        if(value === Array){
+          message = { message: `${value} is Array` };
+        } else {
+          message = { message: `${value} is not Array` };
         }
-        break;
-      case Object: 
-        if (this.isObject(value)){
+      break;
+       case Object: 
+        if (value === Object){
           message = { message: `${value} is Object` };
         } else {
           message = { message: `${value} is not Object` };
         }
       break;
       case String:
-        if (this.isString(value)){
+        if (value === String){
           message = { message: `${value} is String` };
         } else {
           message = { message: `${value} is not String` };
         }
       break;
-      // case Array:
-      //   if (this.isArray(value)){
-      //     message = { message: `${value} is Array` };
-      //   } else {
-      //     message = { message: `${value} is not Array` };
-      //   }
-      // break;
+      case Number:
+        if (value === Number){
+          message = { message: `${value} is Number` };
+        } else {
+          message = { message: `${value} is not Number` };
+        }
+      break;
+      case Boolean:
+        if (value === Boolean){
+          message = { message: `${value} is Boolean` };
+        } else {
+          message = { message: `${value} is not Boolean` };
+        }
+      break;
       default:
         throw new Error(`Unexpected response body: ${value}`);    
     }
-    // if (options.constructor === Array) {
-      
-    // } 
-
-    // for (let i = 0; i < options.length; i++) {
-      
-    //   switch (options[i]) {
-    //     case 'Array': 
-    //       if (this.isArray(value)){
-    //         message = { message: `${value} is Array` };
-    //       } else {
-    //         message = { message: `${value} is not Array` };
-    //       }
-    //       break;
-    //     case 'Object':
-    //       if (this.isObject(value)){
-    //         message = { message: `${value} is Object` };
-    //       } else {
-    //         message = { message: `${value} is not Object` };
-    //       }
-    //       break;
-    //     case 'Boolean':
-    //       if (this.isBoolean(value)){
-    //         message = { message: `${value} is Boolean` };
-    //       } else {
-    //         message = { message: `${value} is not Boolean` };
-    //       }
-    //       break;
-    //     case 'String':
-    //       if (this.isString(value)){
-    //         message = { message: `${value} is String` };
-    //       } else {
-    //         message = { message: `${value} is not String` };
-    //       }
-    //       break;
-    //     case 'Number':
-    //       if (this.isNumber(value)){
-    //         message = { message: `${value} is Number` };
-    //       } else {
-    //         message = { message: `${value} is not Number` };
-    //       }
-    //       break;
-    //     default:
-    //       throw new Error(`Unexpected response body: ${value}`);    
-    //   }
-    // }
     return message;
   }
 
