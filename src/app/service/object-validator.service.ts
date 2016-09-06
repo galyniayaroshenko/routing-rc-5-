@@ -4,183 +4,97 @@ import { Injectable } from '@angular/core';
 export class ObjectValidatorService {
   public constraints: Object;
   public attributes: Object;
-
-  constructor () { }
   
   validate(attributes, constraints) {
-    this.attributes = attributes;
-    this.constraints = constraints;
-    let result = [];
-    let message = {};
+    let errors = [];
 
-    for (let key in constraints) {
-      if (!this.isEmpty(attributes[key])) {
-        if(constraints[key].required === true) {
-          message = this.presence(attributes[key]);
-          result.push(message);
-        }
-        if(this.isArray(attributes[key]) || this.isObject(attributes[key])) {
-          if(this.isDefined(constraints[key].type)) {
-            message = this.type(attributes[key].constructor, constraints[key].type);
-            result.push(message);
-            if(this.isDefined(constraints[key].arrayValueType)) {
-              for (let key2 in attributes[key]) {
-                message = this.arrayValueType(attributes[key][key2], constraints[key].arrayValueType);
-                result.push(message);
-              }
-            } 
-              // else {
-              //   throw new Error(`Unexpected response body`);
-              // }
-          }
-        } else {
-          if(this.isDefined(constraints[key].type)) {
-            message = this.type(attributes[key].constructor, constraints[key].type);
-            result.push(message);
-          }
-          if(this.isNumber(attributes[key]) || this.isString(attributes[key])) {
-            if(this.isDefined(constraints[key].exclusion)) {
-              message = this.exclusion(attributes[key], constraints[key].exclusion);
-              result.push(message);
-            }
-            if(this.isDefined(constraints[key].inclusion)) {
-              message = this.inclusion(attributes[key], constraints[key].inclusion);
-              result.push(message);
-            }
-          } 
-          // else {
-          //   throw new Error(`Unexpected response body`);
-          // }
-          if(this.isNumber(attributes[key])) {
-            if(this.isDefined(constraints[key].range)) {
-              message = this.range(attributes[key], constraints[key].range);
-              result.push(message);
-            }
-          } 
-          // else {
-          //   throw new Error(`Unexpected response body`);
-          // } 
-        }
+    attributes = Object.assign({}, attributes);
+
+    for (let attr in constraints) {
+      let fieldValidationResult = this.fieldValidate(attr, attributes[attr], constraints[attr]);
+
+      if (fieldValidationResult) {
+        errors.push(fieldValidationResult);
       }
+      
+      delete attributes[attr];      
     }
-    return result;
+
+    if (errors.length) {
+      return errors.join('\n');
+    }    
   }
 
+  private fieldValidate(name, value, constraints) {
+    if (this.isEmpty(value)) {
+      if (constraints.required) {
+        return `Field ${name} is required`;
+      }
+      return;
+    }
+    if (constraints.type) {
+      return this.typeCheck(value, constraints.type);
+    }
+    if (constraints.type && constraints.arrayValueType) {
+      return this.typeCheck(value, constraints.arrayValueType);
+    }
+
+    // if (this.isNumber(value) || this.isString(value)) {
+    //   if (constraints.exclusion) {
+    //     return this.exclusion(value, constraints.exclusion);
+    //   }
+    //   // if (constraints.inclusion) {
+    //   //   return this.inclusion(value, constraints.exclusion);
+    //   // }
+    // } 
+    // else {
+    //   return `Expected Number or string! ${value.constructor.name} can not have inclusion or exclusion`;
+    // }
+
+    // if (this.isNumber(value)) {
+    //   if(constraints.range) {
+    //     return this.range(value, constraints.range);
+    //   }
+    // } else {
+    //   return `Expected Number, but ${value.constructor.name} found`;
+    // }
+  }  
+
   public range(value, options) {
-    let message;
     let minimum = options[0];
     let maximum = options[1];
     let length = value;
-    if (this.isEmpty(value)) { 
-      return;
-    }
     if(this.isNumber(minimum) && length < minimum) {
-      return message = {message: `is too short (minimum is ${minimum} characters)`}
+      return `is too short (minimum is ${minimum} characters)`
     }
     if(this.isNumber(maximum) && length > maximum) {
-      return message = {message: `is too long (maximum is ${maximum} characters)`}
+      return `is too long (maximum is ${maximum} characters)`
     }
-    return message = {message: `is cool length ${length}`}
+    return `is cool length ${length}`
   }
-  public arrayValueType(value, options) {
-    let message;
-      switch (options.constructor) {
-        case String:
-          if (this.isString(value))
-            return message = { message: `${value} is String` };
-            message = { message: `${value} is not String` };
-        break;
-        case Number:
-          if (this.isNumber(value))
-            return message = { message: `${value} is Number` };
-            message = { message: `${value} is not Number` };
-        break;
-        case Object:
-          if (this.isObject(value))
-            return message = { message: `${value} is Object` };
-            message = { message: `${value} is not Object` };
-        break;
-        case Array:
-          if (this.isArray(value))
-            return message = { message: `${value} is Array` };
-            message = { message: `${value} is not Array` };
-        break;
-        case Boolean:
-          if (this.isBoolean(value))
-            return message = { message: `${value} is Boolean` };
-            message = { message: `${value} is not Boolean` };
-        break;
-        default:
-          throw new Error(`Unexpected response body: ${value}`);
-      }
-    return message;
-  }
-  public type(value, options) {
-    let message;
-    // if (this.isEmpty(value)) {
-    //   return;
-    // }
-    switch (options.constructor) {
-      case Array:
-        if(value === Array)
-          return message = { message: `${value} is Array` };
-          message = { message: `${value} is not Array` };
-      break;
-       case Object: 
-        if (value === Object)
-          return message = { message: `${value} is Object` };
-          message = { message: `${value} is not Object` };
-      break;
-      case String:
-        if (value === String)
-          return message = { message: `${value} is String` };
-          message = { message: `${value} is not String` };
-      break;
-      case Number:
-        if (value === Number)
-          return message = { message: `${value} is Number` };
-          message = { message: `${value} is not Number` };
-      break;
-      case Boolean:
-        if (value === Boolean)
-          return message = { message: `${value} is Boolean` };
-          message = { message: `${value} is not Boolean` };
-      break;
-      default:
-        throw new Error(`Unexpected response body: ${value}`);    
+
+  public typeCheck(value, options) {
+    if (value.constructor === options) {
+      return `${value.constructor.name} expected`;
     }
-    return message;
+    return `Expected ${new options().constructor.name}, but ${value.constructor.name} found`;     
   }
 
   public inclusion(value, options) {
-    let message;
-    if (this.isEmpty(value)) {
-      return;
-    }
-    if (this.isArray(options)) {
-      options = {within: options};
-    }
     options = this.extend(options);
-    if (this.contains(options.within, value))
-      return message = {message: `${value} is included in the list`};
-      return message = {message: `${value} is not included in the list!!`};
+    if (this.contains(options, value))
+      return `${value} is included in the list`;
+      return `${value} is not included in the list`;
   }
 
   public exclusion(value, options)  {
-    let message;
-    if(this.isEmpty(value)) {
-      return;
-    }
-    if(this.isArray(options)) {
-      options = { within: options };
-    }
     options = this.extend(options);
-    if(!this.contains(options.within, value))
-      return message = {message: `${value} may contain!`};
-      return message = {message: `is restricted`};
+    if(!this.contains(options, value))
+      return `${value} may contain!`;
+      return `is restricted`;
   }
 
-  public presence(value) {
+  public required(value) {
     let message;
     if (this.isEmpty(value))
       return message = {message: `field must be filled!!!`};
@@ -198,9 +112,9 @@ export class ObjectValidatorService {
 
   private isEmpty(value) {
     let attr;
-    // if (this.isDefined(value)) {
-    //   return true;
-    // }
+    if (!this.isDefined(value)) {
+      return false;
+    }
     if (this.isFunction(value)) {
       return false;
     }
@@ -229,7 +143,7 @@ export class ObjectValidatorService {
     return {}.toString.call(value) === '[object Array]';
   }
   private isDefined(obj) {
-    return typeof obj !== null && obj != undefined;
+    return typeof obj !== null && obj !== undefined;
   }
   private isFunction (value) {
     return typeof value === 'function';
@@ -256,8 +170,5 @@ export class ObjectValidatorService {
       }
     });
     return obj;
-  };
+  }
 }
-
-
-

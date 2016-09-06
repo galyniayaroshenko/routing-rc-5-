@@ -28,17 +28,31 @@ export class HomeComponent implements OnInit {
       this.users = data;
       console.log('this.users', this.users);
     });
-    //this.ObjectValidatorService.validate();
-    console.log('this.ObjectValidatorService.validate();', 
-    this.objectValidatorService.validate({status: 'response.status'}, 
-    {
-      status: {
-        required: true,
-        exclusion: ['OK', 'ERROR:general', 'ERROR:target', 'asd', 34, true],
-        inclusion: ['smile', 'OK'],
-      }
-    }));
-     
+    console.log('validate();', 
+      JSON.stringify(this.objectValidatorService.validate(
+        {
+          status: 23,
+          data: {df: 'dv'}
+        }, 
+        {
+          status: {
+            required: true,
+            type: Object,
+            arrayValueType: String,
+            exclusion: ['OK', 'ERROR:general', 'ERROR:target', 'asd', 23, true, 'cds', 'dsa'],
+            inclusion: ['smile', 'OK'],
+            range: [1, 10]
+          },
+          data: {
+            type: Object,
+            arrayValueType: String,
+            range: [1, 20]
+            // exclusion: ['OK', 'ERROR:general', 'ERROR:target', 'asd', 34, true],
+            // inclusion: ['smile', 'OK']
+          }
+        }), null, 2
+      )
+    );
   }
 }
 
