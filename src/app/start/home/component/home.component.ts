@@ -33,12 +33,22 @@ export class HomeComponent implements OnInit {
     this.objectValidatorService.validate({status: 'response.status'}, 
     {
       status: {
-        presence: true,
-        exclusion: {
-          within: ['OK', 'ERROR:general', 'ERROR:target']
-        }
+        required: true,
+        exclusion: ['OK', 'ERROR:general', 'ERROR:target', 'asd', 34, true],
+        inclusion: ['smile', 'OK'],
       }
     }));
      
   }
 }
+
+
+    // let con = {
+    //   status: {
+    //     required: true,
+    //     exclusion: ['OK', 'ERROR:general', 'ERROR:target', 'asd', 34, true],
+    //     inclusion: ['smile', 'OK'],
+    //     type: 4,
+    //     arrayValueType: '',
+    //     range: [1, 10]
+    //   }

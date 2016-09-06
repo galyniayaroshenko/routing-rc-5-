@@ -8,93 +8,58 @@ export class ObjectValidatorService {
   constructor () { }
   
   validate(attributes, constraints) {
-    // this.attributes = attributes;
-    // this.constraints = constraints;
+    this.attributes = attributes;
+    this.constraints = constraints;
     let result = [];
     let message = {};
 
-    let attr = {
-      status: 44,
-      data: 'cds'
-    };
-
-    let con = {
-      status: {
-        required: true,
-        exclusion: ['OK', 'ERROR:general', 'ERROR:target', 'asd', 34, true],
-        inclusion: ['smile', 'OK'],
-        type: 4,
-        arrayValueType: '',
-        range: [1, 10]
-      },
-      data: {
-        required: true,
-        exclusion: ['OK'],
-        inclusion: ['smile', 'OK'],
-        range: [1, 50],
-        type: [],
-        arrayValueType: ''
-      }
-    }
-
-    for (let key in con) {
-
-      if (!this.isEmpty(attr[key])) {
-
-        if(con[key].required === true) {
-          message = this.presence(attr[key]);
+    for (let key in constraints) {
+      if (!this.isEmpty(attributes[key])) {
+        if(constraints[key].required === true) {
+          message = this.presence(attributes[key]);
           result.push(message);
         }
-
-        if(this.isArray(attr[key]) || this.isObject(attr[key])) {
-
-          if(this.isDefined(con[key].type)) {
-            message = this.type(attr[key].constructor, con[key].type);
+        if(this.isArray(attributes[key]) || this.isObject(attributes[key])) {
+          if(this.isDefined(constraints[key].type)) {
+            message = this.type(attributes[key].constructor, constraints[key].type);
             result.push(message);
-
-            if(this.isDefined(con[key].arrayValueType)) {
-
-              for (let key2 in attr[key]) {
-                message = this.arrayValueType(attr[key][key2], con[key].arrayValueType);
+            if(this.isDefined(constraints[key].arrayValueType)) {
+              for (let key2 in attributes[key]) {
+                message = this.arrayValueType(attributes[key][key2], constraints[key].arrayValueType);
                 result.push(message);
               }
             } 
               // else {
               //   throw new Error(`Unexpected response body`);
               // }
-
           }
         } else {
-
-          if(this.isDefined(con[key].type)) {
-            message = this.type(attr[key].constructor, con[key].type);
+          if(this.isDefined(constraints[key].type)) {
+            message = this.type(attributes[key].constructor, constraints[key].type);
             result.push(message);
           }
-
-          if(this.isNumber(attr[key]) || this.isString(attr[key])) {
-            if(this.isDefined(con[key].exclusion)) {
-              message = this.exclusion(attr[key], con[key].exclusion);
+          if(this.isNumber(attributes[key]) || this.isString(attributes[key])) {
+            if(this.isDefined(constraints[key].exclusion)) {
+              message = this.exclusion(attributes[key], constraints[key].exclusion);
               result.push(message);
             }
-            if(this.isDefined(con[key].inclusion)) {
-              message = this.inclusion(attr[key], con[key].inclusion);
+            if(this.isDefined(constraints[key].inclusion)) {
+              message = this.inclusion(attributes[key], constraints[key].inclusion);
               result.push(message);
             }
           } 
           // else {
           //   throw new Error(`Unexpected response body`);
           // }
-
-          if(this.isNumber(attr[key])) {
-            if(this.isDefined(con[key].range)) {
-              message = this.range(attr[key], con[key].range);
+          if(this.isNumber(attributes[key])) {
+            if(this.isDefined(constraints[key].range)) {
+              message = this.range(attributes[key], constraints[key].range);
               result.push(message);
             }
           } 
           // else {
           //   throw new Error(`Unexpected response body`);
           // } 
-
         }
       }
     }
@@ -106,57 +71,44 @@ export class ObjectValidatorService {
     let minimum = options[0];
     let maximum = options[1];
     let length = value;
-
     if (this.isEmpty(value)) { 
       return;
     }
     if(this.isNumber(minimum) && length < minimum) {
       return message = {message: `is too short (minimum is ${minimum} characters)`}
     }
-    
     if(this.isNumber(maximum) && length > maximum) {
       return message = {message: `is too long (maximum is ${maximum} characters)`}
     }
-
     return message = {message: `is cool length ${length}`}
   }
   public arrayValueType(value, options) {
     let message;
       switch (options.constructor) {
         case String:
-        // for (let i = 0; i < value.length; i++) {
           if (this.isString(value))
             return message = { message: `${value} is String` };
             message = { message: `${value} is not String` };
-        // }
         break;
         case Number:
-        // for (let i = 0; i < value.length; i++) {
           if (this.isNumber(value))
             return message = { message: `${value} is Number` };
             message = { message: `${value} is not Number` };
-        // }
         break;
         case Object:
-        // for (let i = 0; i < value.length; i++) {
           if (this.isObject(value))
             return message = { message: `${value} is Object` };
             message = { message: `${value} is not Object` };
-        // } 
         break;
         case Array:
-        // for (let i = 0; i < value.length; i++) {
           if (this.isArray(value))
             return message = { message: `${value} is Array` };
             message = { message: `${value} is not Array` };
-        // } 
         break;
         case Boolean:
-        // for (let i = 0; i < value.length; i++) {
           if (this.isBoolean(value))
             return message = { message: `${value} is Boolean` };
             message = { message: `${value} is not Boolean` };
-        // } 
         break;
         default:
           throw new Error(`Unexpected response body: ${value}`);
@@ -255,11 +207,9 @@ export class ObjectValidatorService {
     if (this.isString(value)) {
       return false;
     }
-
     if (this.isArray(value)) {
       return value.length === 0;
     }
-
     if (this.isDate(value)) {
       return false;
     }
@@ -272,14 +222,12 @@ export class ObjectValidatorService {
       }
       return true;
     }
-
     return false;
   }
 
   private isArray(value) {
     return {}.toString.call(value) === '[object Array]';
   }
-
   private isDefined(obj) {
     return typeof obj !== null && obj != undefined;
   }
