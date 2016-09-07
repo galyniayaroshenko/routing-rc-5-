@@ -8,7 +8,13 @@ export class ObjectValidatorService {
   validate(attributes, constraints) {
     let errors = [];
 
-    attributes = Object.assign({}, attributes);
+    attributes = this.extendObj({}, attributes);
+    
+    for (let val in attributes) {
+      if(constraints[val] === undefined) {
+        throw new Error(`Unexpected response body: ${val}`);
+      }
+    }
 
     for (let attr in constraints) {
       let fieldValidationResult = this.fieldValidate(attr, attributes[attr], constraints[attr]);
@@ -16,10 +22,8 @@ export class ObjectValidatorService {
       if (fieldValidationResult) {
         errors.push(fieldValidationResult);
       }
-      
       delete attributes[attr];      
     }
-
     if (errors.length) {
       return errors.join('\n\n');
     }    
@@ -34,11 +38,7 @@ export class ObjectValidatorService {
     if (constraints.type) {
       fieldValidationArray.push(this.typeCheck(value, constraints.type));
 
-      if ((this.isNumber(value) || this.isString(value) || this.isBoolean(value)) && constraints.valueSubType) {
-        // fieldValidationArray.push(`Expected Object or Array! ${value.constructor.name} can not have valueSubType`);
-        throw new Error(`Expected Object or Array! ${value.constructor.name} can not have valueSubType`);
-      } 
-      else if ((this.isArray(value) || this.isObject(value)) && constraints.valueSubType) {
+     if ((this.isArray(value) || this.isObject(value)) && constraints.valueSubType) {
         for (let key in value) {
           fieldValidationArray.push(this.typeCheck(value[key], constraints.valueSubType));
         }
@@ -52,18 +52,17 @@ export class ObjectValidatorService {
       if (constraints.inclusion) {
         fieldValidationArray.push(this.inclusion(value, constraints.inclusion));
       }
-    } else if ((!this.isNumber(value) || !this.isString(value)) && (constraints.exclusion || constraints.inclusion)) {
-      fieldValidationArray.push(`Expected Number or string! ${value.constructor.name} can not have inclusion or exclusion`);
     }
 
     if (this.isNumber(value)) {
       if(constraints.range) {
         fieldValidationArray.push(this.range(value, constraints.range));
       }
-    } else if (!this.isNumber(value) && constraints.range){
-      fieldValidationArray.push(`Expected Number!${value.constructor.name} can not have range`);
     }
-    return fieldValidationArray;
+
+    if (fieldValidationArray.length) {
+      return fieldValidationArray.join('\n');
+    }
   }  
 
   public range(value, options) {
@@ -84,13 +83,13 @@ export class ObjectValidatorService {
   }
 
   public inclusion(value, options) {
-    options = this.extend(options);
+    options = this.extendArray(options);
     if (!this.contains(options, value))
       return `${value} is not included in the list`;
   }
 
   public exclusion(value, options)  {
-    options = this.extend(options);
+    options = this.extendArray(options);
     if(this.contains(options, value))
       return `Is restricted`;
   }
@@ -154,12 +153,18 @@ export class ObjectValidatorService {
   private isBoolean(value) {
     return typeof value === 'boolean';
   }
-  private extend(obj) {
+  private extendArray(obj) {
     [].slice.call(arguments, 1).forEach(function(source) {
       for (var attr in source) {
         obj[attr] = source[attr];
       }
     });
+    return obj;
+  }
+  private extendObj(obj, src) {
+    for (var key in src) {
+      if (src.hasOwnProperty(key)) obj[key] = src[key];
+    }
     return obj;
   }
 }
