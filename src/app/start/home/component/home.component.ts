@@ -10,7 +10,7 @@ import { ObjectValidatorService } from '../../../service/object-validator.servic
 @Component({
   templateUrl: '../view/home.html',
   styleUrls: [ '../view/home.scss' ],
-  providers: [ ObjectValidatorService, HomeService]
+  providers: [ ObjectValidatorService, HomeService ]
 })
 
 export class HomeComponent implements OnInit {
@@ -31,19 +31,18 @@ export class HomeComponent implements OnInit {
     console.log('validate();', 
       JSON.stringify(this.objectValidatorService.validate(
         {
-          status: {ds: 'vdf'},
+          status: ['sdf'],
           data: {df: 'dv'}
         }, 
         {
           status: {
             required: true,
             type: Object,
-            valueSubType: String,
-            // exclusion: ['OK', 'ERROR:general', 'ERROR:target', 'asd', 23, true, 'cds', 'dsa'],
+            valueSubType: Number,
+            // exclusion: ['OK', 'ERROR:general', 'ERROR:target', 'asd', 5,  true, 'cds', 'dsa'],
             // inclusion: ['smile', 'OK'],
             // range: [1, 20]
           }
-          // ,
           // data: {
           //   type: Object,
           //   valueSubType: String,

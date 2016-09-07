@@ -21,26 +21,27 @@ export class ObjectValidatorService {
     }
 
     if (errors.length) {
-      return errors.join('\n');
+      return errors.join('\n\n');
     }    
   }
 
   private fieldValidate(name, value, constraints) {
     let fieldValidationArray = [];
     if (this.isEmpty(value)) {
-      if (constraints.required) {
-        // fieldValidationArray.push(`Field ${name} is required`);
-        return `Field ${name} is required`
-      }
-        fieldValidationArray.push('');
+      if (constraints.required)
+        return `Field ${name} is required`;
     }
     if (constraints.type) {
       fieldValidationArray.push(this.typeCheck(value, constraints.type));
 
       if ((this.isNumber(value) || this.isString(value) || this.isBoolean(value)) && constraints.valueSubType) {
-        fieldValidationArray.push(`Expected Object or Array! ${value.constructor.name} can not have valueSubType`);
-      } else {
-        fieldValidationArray.push(this.typeCheck(value, constraints.valueSubType));
+        // fieldValidationArray.push(`Expected Object or Array! ${value.constructor.name} can not have valueSubType`);
+        throw new Error(`Expected Object or Array! ${value.constructor.name} can not have valueSubType`);
+      } 
+      else if ((this.isArray(value) || this.isObject(value)) && constraints.valueSubType) {
+        for (let key in value) {
+          fieldValidationArray.push(this.typeCheck(value[key], constraints.valueSubType));
+        }
       }
     } 
     
@@ -49,7 +50,7 @@ export class ObjectValidatorService {
         fieldValidationArray.push(this.exclusion(value, constraints.exclusion));
       }
       if (constraints.inclusion) {
-        fieldValidationArray.push(this.inclusion(value, constraints.exclusion));
+        fieldValidationArray.push(this.inclusion(value, constraints.inclusion));
       }
     } else if ((!this.isNumber(value) || !this.isString(value)) && (constraints.exclusion || constraints.inclusion)) {
       fieldValidationArray.push(`Expected Number or string! ${value.constructor.name} can not have inclusion or exclusion`);
@@ -70,32 +71,27 @@ export class ObjectValidatorService {
     let maximum = options[1];
     let length = value;
     if(this.isNumber(minimum) && length < minimum) {
-      return `Is too short (minimum is ${minimum} characters)`
+      return `The small number(minimum number is ${minimum})`
     }
     if(this.isNumber(maximum) && length > maximum) {
-      return `Is too long (maximum is ${maximum} characters)`
+      return `The large number (maximum number is ${maximum})`
     }
-    return `Is cool length ${length}`
   }
 
   public typeCheck(value, options) {
-    if (value.constructor === options) {
-      return `${value.constructor.name} expected`;
-    }
-    return `Expected ${new options().constructor.name}, but ${value.constructor.name} found`;     
+    if (value.constructor !== options)
+      return `Expected ${new options().constructor.name}, but ${value.constructor.name} found`;  
   }
 
   public inclusion(value, options) {
     options = this.extend(options);
-    if (this.contains(options, value))
-      return `${value} is included in the list`;
+    if (!this.contains(options, value))
       return `${value} is not included in the list`;
   }
 
   public exclusion(value, options)  {
     options = this.extend(options);
-    if(!this.contains(options, value))
-      return `${value} may contain!`;
+    if(this.contains(options, value))
       return `Is restricted`;
   }
   private contains(obj, value) {
