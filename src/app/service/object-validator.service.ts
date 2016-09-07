@@ -26,38 +26,43 @@ export class ObjectValidatorService {
   }
 
   private fieldValidate(name, value, constraints) {
+    let fieldValidationArray = [];
     if (this.isEmpty(value)) {
       if (constraints.required) {
-        return `Field ${name} is required`;
+        // fieldValidationArray.push(`Field ${name} is required`);
+        return `Field ${name} is required`
       }
-      return;
+        fieldValidationArray.push('');
     }
     if (constraints.type) {
-      return this.typeCheck(value, constraints.type);
-    }
-    if (constraints.type && constraints.arrayValueType) {
-      return this.typeCheck(value, constraints.arrayValueType);
+      fieldValidationArray.push(this.typeCheck(value, constraints.type));
+
+      if ((this.isNumber(value) || this.isString(value) || this.isBoolean(value)) && constraints.valueSubType) {
+        fieldValidationArray.push(`Expected Object or Array! ${value.constructor.name} can not have valueSubType`);
+      } else {
+        fieldValidationArray.push(this.typeCheck(value, constraints.valueSubType));
+      }
+    } 
+    
+    if (this.isNumber(value) || this.isString(value)) {
+      if (constraints.exclusion) {
+        fieldValidationArray.push(this.exclusion(value, constraints.exclusion));
+      }
+      if (constraints.inclusion) {
+        fieldValidationArray.push(this.inclusion(value, constraints.exclusion));
+      }
+    } else if ((!this.isNumber(value) || !this.isString(value)) && (constraints.exclusion || constraints.inclusion)) {
+      fieldValidationArray.push(`Expected Number or string! ${value.constructor.name} can not have inclusion or exclusion`);
     }
 
-    // if (this.isNumber(value) || this.isString(value)) {
-    //   if (constraints.exclusion) {
-    //     return this.exclusion(value, constraints.exclusion);
-    //   }
-    //   // if (constraints.inclusion) {
-    //   //   return this.inclusion(value, constraints.exclusion);
-    //   // }
-    // } 
-    // else {
-    //   return `Expected Number or string! ${value.constructor.name} can not have inclusion or exclusion`;
-    // }
-
-    // if (this.isNumber(value)) {
-    //   if(constraints.range) {
-    //     return this.range(value, constraints.range);
-    //   }
-    // } else {
-    //   return `Expected Number, but ${value.constructor.name} found`;
-    // }
+    if (this.isNumber(value)) {
+      if(constraints.range) {
+        fieldValidationArray.push(this.range(value, constraints.range));
+      }
+    } else if (!this.isNumber(value) && constraints.range){
+      fieldValidationArray.push(`Expected Number!${value.constructor.name} can not have range`);
+    }
+    return fieldValidationArray;
   }  
 
   public range(value, options) {
@@ -65,12 +70,12 @@ export class ObjectValidatorService {
     let maximum = options[1];
     let length = value;
     if(this.isNumber(minimum) && length < minimum) {
-      return `is too short (minimum is ${minimum} characters)`
+      return `Is too short (minimum is ${minimum} characters)`
     }
     if(this.isNumber(maximum) && length > maximum) {
-      return `is too long (maximum is ${maximum} characters)`
+      return `Is too long (maximum is ${maximum} characters)`
     }
-    return `is cool length ${length}`
+    return `Is cool length ${length}`
   }
 
   public typeCheck(value, options) {
@@ -91,16 +96,8 @@ export class ObjectValidatorService {
     options = this.extend(options);
     if(!this.contains(options, value))
       return `${value} may contain!`;
-      return `is restricted`;
+      return `Is restricted`;
   }
-
-  public required(value) {
-    let message;
-    if (this.isEmpty(value))
-      return message = {message: `field must be filled!!!`};
-      return message = {message: `supper`};
-  }
-
   private contains(obj, value) {
     if(!this.isDefined(obj)) {
       return false;
@@ -109,7 +106,6 @@ export class ObjectValidatorService {
       return obj.indexOf(value) !== -1;
     return value in obj;
   }
-
   private isEmpty(value) {
     let attr;
     if (!this.isDefined(value)) {
@@ -138,7 +134,6 @@ export class ObjectValidatorService {
     }
     return false;
   }
-
   private isArray(value) {
     return {}.toString.call(value) === '[object Array]';
   }

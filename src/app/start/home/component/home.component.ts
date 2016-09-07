@@ -31,25 +31,26 @@ export class HomeComponent implements OnInit {
     console.log('validate();', 
       JSON.stringify(this.objectValidatorService.validate(
         {
-          status: 23,
+          status: {ds: 'vdf'},
           data: {df: 'dv'}
         }, 
         {
           status: {
             required: true,
             type: Object,
-            arrayValueType: String,
-            exclusion: ['OK', 'ERROR:general', 'ERROR:target', 'asd', 23, true, 'cds', 'dsa'],
-            inclusion: ['smile', 'OK'],
-            range: [1, 10]
-          },
-          data: {
-            type: Object,
-            arrayValueType: String,
-            range: [1, 20]
-            // exclusion: ['OK', 'ERROR:general', 'ERROR:target', 'asd', 34, true],
-            // inclusion: ['smile', 'OK']
+            valueSubType: String,
+            // exclusion: ['OK', 'ERROR:general', 'ERROR:target', 'asd', 23, true, 'cds', 'dsa'],
+            // inclusion: ['smile', 'OK'],
+            // range: [1, 20]
           }
+          // ,
+          // data: {
+          //   type: Object,
+          //   valueSubType: String,
+          //   range: [1, 20]
+          //   // exclusion: ['OK', 'ERROR:general', 'ERROR:target', 'asd', 34, true],
+          //   // inclusion: ['smile', 'OK']
+          // }
         }), null, 2
       )
     );
@@ -63,6 +64,6 @@ export class HomeComponent implements OnInit {
     //     exclusion: ['OK', 'ERROR:general', 'ERROR:target', 'asd', 34, true],
     //     inclusion: ['smile', 'OK'],
     //     type: 4,
-    //     arrayValueType: '',
+    //     valueSubType: '',
     //     range: [1, 10]
     //   }
