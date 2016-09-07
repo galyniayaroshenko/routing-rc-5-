@@ -4,29 +4,36 @@ import { Injectable } from '@angular/core';
 export class ObjectValidatorService {
   public constraints: Object;
   public attributes: Object;
-  
-  validate(attributes, constraints) {
-    let errors = [];
 
-    attributes = this.extendObj({}, attributes);
-    
-    for (let val in attributes) {
-      if(constraints[val] === undefined) {
-        throw new Error(`Unexpected response body: ${val}`);
-      }
+  private contains(obj, value) {
+    if(!this.isDefined(obj)) {
+      return false;
     }
+    if(this.isArray(obj))
+      return obj.indexOf(value) !== -1;
+    return value in obj;
+  }
 
-    for (let attr in constraints) {
-      let fieldValidationResult = this.fieldValidate(attr, attributes[attr], constraints[attr]);
+  private exclusion(value, options)  {
+    options = this.extendArray(options);
+    if(this.contains(options, value))
+      return `Is restricted`;
+  }
 
-      if (fieldValidationResult) {
-        errors.push(fieldValidationResult);
+  private extendArray(obj) {
+    [].slice.call(arguments, 1).forEach(function(source) {
+      for (var attr in source) {
+        obj[attr] = source[attr];
       }
-      delete attributes[attr];      
+    });
+    return obj;
+  }
+
+  private extendObj(obj, src) {
+    for (var key in src) {
+      if (src.hasOwnProperty(key)) obj[key] = src[key];
     }
-    if (errors.length) {
-      return errors.join('\n\n');
-    }    
+    return obj;
   }
 
   private fieldValidate(name, value, constraints) {
@@ -59,48 +66,34 @@ export class ObjectValidatorService {
         fieldValidationArray.push(this.range(value, constraints.range));
       }
     }
-
+    
     if (fieldValidationArray.length) {
       return fieldValidationArray.join('\n');
     }
-  }  
-
-  public range(value, options) {
-    let minimum = options[0];
-    let maximum = options[1];
-    let length = value;
-    if(this.isNumber(minimum) && length < minimum) {
-      return `The small number(minimum number is ${minimum})`
-    }
-    if(this.isNumber(maximum) && length > maximum) {
-      return `The large number (maximum number is ${maximum})`
-    }
   }
 
-  public typeCheck(value, options) {
-    if (value.constructor !== options)
-      return `Expected ${new options().constructor.name}, but ${value.constructor.name} found`;  
-  }
-
-  public inclusion(value, options) {
+  private inclusion(value, options) {
     options = this.extendArray(options);
     if (!this.contains(options, value))
       return `${value} is not included in the list`;
   }
 
-  public exclusion(value, options)  {
-    options = this.extendArray(options);
-    if(this.contains(options, value))
-      return `Is restricted`;
+  private isArray(value) {
+    return {}.toString.call(value) === '[object Array]';
   }
-  private contains(obj, value) {
-    if(!this.isDefined(obj)) {
-      return false;
-    }
-    if(this.isArray(obj))
-      return obj.indexOf(value) !== -1;
-    return value in obj;
+
+  private isBoolean(value) {
+    return typeof value === 'boolean';
   }
+
+  private isDate(obj) {
+    return obj instanceof Date;
+  }
+
+  private isDefined(obj) {
+    return typeof obj !== null && obj !== undefined && obj !== '';
+  }
+
   private isEmpty(value) {
     let attr;
     if (!this.isDefined(value)) {
@@ -129,42 +122,83 @@ export class ObjectValidatorService {
     }
     return false;
   }
-  private isArray(value) {
-    return {}.toString.call(value) === '[object Array]';
-  }
-  private isDefined(obj) {
-    return typeof obj !== null && obj !== undefined;
-  }
+
   private isFunction (value) {
     return typeof value === 'function';
   }
-  private isString(value) {
-    return typeof value === 'string';
-  }
-  private isDate(obj) {
-    return obj instanceof Date;
-  }
-  private isObject(obj) {
-    return obj === Object(obj);
-  }
+
   private isNumber(value) {
     return typeof value === 'number' && !isNaN(value);
   }
-  private isBoolean(value) {
-    return typeof value === 'boolean';
+
+  private isObject(obj) {
+    return obj === Object(obj);
   }
-  private extendArray(obj) {
-    [].slice.call(arguments, 1).forEach(function(source) {
-      for (var attr in source) {
-        obj[attr] = source[attr];
-      }
-    });
-    return obj;
+
+  private isString(value) {
+    return typeof value === 'string';
   }
-  private extendObj(obj, src) {
-    for (var key in src) {
-      if (src.hasOwnProperty(key)) obj[key] = src[key];
+
+  private range(value, options) {
+    let minimum = options[0];
+    let maximum = options[1];
+    let length = value;
+    if(this.isNumber(minimum) && length < minimum) {
+      return `The small number(minimum number is ${minimum})`
     }
-    return obj;
+    if(this.isNumber(maximum) && length > maximum) {
+      return `The large number (maximum number is ${maximum})`
+    }
   }
+
+  private typeCheck(value, options) {
+    if (value.constructor !== options)
+      return `Expected ${new options().constructor.name}, but ${value.constructor.name} found`;  
+  }
+
+  validate(attributes, constraints) {
+    let errors = [];
+
+    attributes = this.extendObj({}, attributes);
+    
+    for (let val in attributes) {
+      if(constraints[val] === undefined) {
+        throw new Error(`Unexpected response body: ${val}`);
+      }
+    }
+
+    for (let attr in constraints) {
+      let fieldValidationResult = this.fieldValidate(attr, attributes[attr], constraints[attr]);
+
+      if (fieldValidationResult) {
+        errors.push(fieldValidationResult);
+      }
+      delete attributes[attr];      
+    }
+    if (errors.length) {
+      return errors.join('\n\n');
+    }    
+  }
+
+   
+
+  
+
+  
+
+  
+
+ 
+ 
+  
+  
+  
+ 
+  
+  
+  
+  
+  
+  
+  
 }
