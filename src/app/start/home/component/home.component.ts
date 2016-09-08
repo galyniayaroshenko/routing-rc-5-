@@ -28,29 +28,28 @@ export class HomeComponent implements OnInit {
       this.users = data;
       console.log('this.users', this.users);
     });
-    console.log('validate();', 
-      JSON.stringify(this.objectValidatorService.validate(
+    console.log(this.objectValidatorService.validate(
         {
-          status: '',
-          data: {vfdvfd: 'vd'}
+          status: 32
+          // data: ['ds', 'cds']
         }, 
         {
           status: {
             required: true,
-            type: Array,
-            valueSubType: String,
-            // exclusion: ['OK', 'ERROR:general', 'ERROR:target', 'asd', 5,  true, 'cds', 'dsa'],
-            // inclusion: ['smile', 'OK'],
-            range: [1, 20]
-          },
-          data: {
-            required: true,
-            type: Number,
-            range: [1, 20]
-            // exclusion: ['OK', 'ERROR:general', 'ERROR:target', 'asd', 34, true],
+            type: String,
+            // arrayValueType: Number
+            exclusion: ['OK', 'ERROR:general', 'ERROR:target', 32,  true]
             // inclusion: ['smile', 'OK']
+            // range: [1, 20]
           }
-        }), null, 2
+          // data: {
+          //   required: true,
+          //   type: Array,
+          //   // range: [1, 20]
+          //   // exclusion: ['OK', 'ERROR:general', 'ERROR:target', 'asd', 34, true],
+          //   // inclusion: ['smile', 'OK']
+          // }
+        }
       )
     );
   }
