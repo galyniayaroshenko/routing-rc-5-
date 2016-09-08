@@ -31,8 +31,8 @@ export class HomeComponent implements OnInit {
     console.log('validate();', 
       JSON.stringify(this.objectValidatorService.validate(
         {
-          status: 3,
-          data: {vfd: 'vd'}
+          status: '',
+          data: {vfdvfd: 'vd'}
         }, 
         {
           status: {

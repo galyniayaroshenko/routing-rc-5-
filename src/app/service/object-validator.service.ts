@@ -91,7 +91,7 @@ export class ObjectValidatorService {
   }
 
   private isDefined(obj) {
-    return typeof obj !== null && obj !== undefined && obj !== '';
+    return typeof obj !== null && obj !== undefined;
   }
 
   private isEmpty(value) {
@@ -103,7 +103,7 @@ export class ObjectValidatorService {
       return false;
     }
     if (this.isString(value)) {
-      return false;
+      return value.length === 0;
     }
     if (this.isArray(value)) {
       return value.length === 0;
@@ -162,6 +162,7 @@ export class ObjectValidatorService {
     attributes = this.extendObj({}, attributes);
     
     for (let val in attributes) {
+      
       if(constraints[val] === undefined) {
         throw new Error(`Unexpected response body: ${val}`);
       }
